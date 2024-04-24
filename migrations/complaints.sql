@@ -8,4 +8,7 @@ CREATE TABLE IF NOT EXISTS complaint
 	status NOT NULL DEFAULT open,
 	-- TODO decide if tags should be TEXT or an ENUM
 	tags TEXT,
+	time_created timestamp,
+	time_closed timestamp,
+
 )

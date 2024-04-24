@@ -1,6 +1,7 @@
 mod config;
 mod google_oauth;
 mod model;
+mod complaints;
 
 use crate::model::AppState;
 use actix_cors::Cors;
