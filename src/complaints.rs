@@ -21,12 +21,12 @@ struct Complaint {
 	tags: Option<String> //Vec<Tags> ?
 }
 
-#[get("complaints")]
+#[get("open")]
 pub async fn get_complaints(state: Data<AppState>) -> impl Responder {
 	let db_pool = &state.get_ref().db;
 	let complaints = query_as!(
 		Complaint,
-		r#"SELECT id, title, description, status as "status!: Status", tags FROM complaint"#
+		r#"SELECT id, title, description, status as "status!: Status", tags FROM complaint WHERE status='open'"#
 	)
     .fetch_all(db_pool)
     .await
