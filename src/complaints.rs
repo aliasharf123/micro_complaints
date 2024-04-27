@@ -53,7 +53,7 @@ pub async fn get_closed_complaints(state: Data<AppState>) -> impl Responder {
 
 #[post("new")]
 async fn insert_complaint(
-    db_pool: Data<AppState>,
+    state: Data<AppState>,
     complaint: web::Query<Complaint>,
 ) -> impl Responder {
     let db_pool = &state.get_ref().db;
@@ -64,7 +64,7 @@ async fn insert_complaint(
         complaint.status,
         complaint.tags
     )
-    .execute(db_pool.get_ref())
+    .execute(db_pool)
     .await
     .expect("I shat");
     HttpResponse::Ok().body("inserted")
