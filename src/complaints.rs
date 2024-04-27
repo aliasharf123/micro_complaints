@@ -25,6 +25,7 @@ struct Complaint {
 pub async fn get_complaints(state: Data<AppState>) -> impl Responder {
     let db_pool = &state.get_ref().db;
     let complaints = query_as!(
+
 		Complaint,
 		r#"SELECT id, title, description, status as "status!: Status", tags FROM complaint WHERE status='open'"#
 	)
@@ -43,6 +44,7 @@ pub async fn get_closed_complaints(state: Data<AppState>) -> impl Responder {
 		Complaint,
 		r#"SELECT id, title, description, status as "status!: Status", tags FROM complaint WHERE status='closed'"#
 	)
+
     .fetch_all(db_pool)
     .await
     .expect("Could not fetch complaints");

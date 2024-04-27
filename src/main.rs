@@ -1,3 +1,4 @@
+mod auth;
 mod complaints;
 mod config;
 mod google_oauth;
