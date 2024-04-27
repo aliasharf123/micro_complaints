@@ -1,6 +1,6 @@
-use actix_web::{get, web::Data, HttpResponse, Responder};
+use actix_web::{get, post, web, web::Data, HttpResponse, Responder};
 use serde::Serialize;
-use sqlx::query_as;
+use sqlx::{query, query_as};
 
 use crate::model::AppState;
 
@@ -21,7 +21,7 @@ struct Complaint {
     tags: Option<String>, //Vec<Tags> ?
 }
 
-#[get("complaints")]
+#[get("open")]
 pub async fn get_complaints(state: Data<AppState>) -> impl Responder {
     let db_pool = &state.get_ref().db;
     let complaints = query_as!(
