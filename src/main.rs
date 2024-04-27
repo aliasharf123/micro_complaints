@@ -1,7 +1,8 @@
+mod auth;
+mod complaints;
 mod config;
 mod google_oauth;
 mod model;
-mod complaints;
 
 use crate::model::AppState;
 use actix_cors::Cors;
@@ -30,7 +31,10 @@ async fn main() -> std::io::Result<()> {
                 header::ACCEPT,
             ])
             .supports_credentials();
-        App::new().service(get_complaints).app_data(app_data.clone()).wrap(cors)
+        App::new()
+            .service(get_complaints)
+            .app_data(app_data.clone())
+            .wrap(cors)
     })
     .bind(init_address())?
     .run()
