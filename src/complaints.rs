@@ -1,10 +1,10 @@
 use actix_web::{get, post, web, web::Data, HttpResponse, Responder};
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 use sqlx::{query, query_as};
 
 use crate::model::AppState;
 
-#[derive(Debug, sqlx::Type, Serialize)]
+#[derive(Debug, sqlx::Type, Serialize, Deserialize)]
 #[sqlx(type_name = "status")]
 #[sqlx(rename_all = "lowercase")]
 enum Status {
@@ -12,7 +12,7 @@ enum Status {
     Taken,
     Closed,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct Complaint {
     id: i64,
     title: String,
