@@ -1,3 +1,4 @@
+-- Add up migration script here
 CREATE TYPE status AS ENUM ('open', 'closed', 'taken');
 -- CREATE TYPE tags AS ENUM ('')
 CREATE TABLE IF NOT EXISTS complaint (

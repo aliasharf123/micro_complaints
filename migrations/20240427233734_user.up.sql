@@ -1,3 +1,4 @@
+-- Add up migration script here
 CREATE TYPE role AS ENUM ('pleb', 'admin', 'support');
 
 CREATE TABLE IF NOT EXISTS users (

@@ -3,19 +3,23 @@ use serde::{Deserialize, Serialize};
 
 use crate::config;
 
+#[derive(Debug, sqlx::Type, Serialize, Deserialize, Clone)]
+#[sqlx(type_name = "role")]
+#[sqlx(rename_all = "lowercase")]
+pub enum Role {
+    Pleb,
+    Admin,
+    Support,
+}
+
 #[allow(non_snake_case)]
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct User {
-    pub id: Option<String>,
+    pub id: i64,
     pub name: String,
     pub email: String,
-    pub password: String,
-    pub role: String,
-    pub photo: String,
-    pub verified: bool,
-    pub provider: String,
-    pub createdAt: Option<DateTime<Utc>>,
-    pub updatedAt: Option<DateTime<Utc>>,
+    pub role: Role,
+    pub photo: Option<String>,
 }
 pub struct AppState {
     pub db: sqlx::Pool<sqlx::Postgres>,
@@ -42,7 +46,12 @@ pub struct TokenClaims {
 pub struct RegisterUserSchema {
     pub name: String,
     pub email: String,
-    pub password: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct QueryCode {
+    pub code: String,
+    pub state: String,
 }
 
 #[derive(Debug, Deserialize)]

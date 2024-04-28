@@ -52,10 +52,7 @@ pub async fn get_closed_complaints(state: Data<AppState>) -> impl Responder {
 }
 
 #[post("new")]
-async fn insert_complaint(
-    state: Data<AppState>,
-    complaint: web::Query<Complaint>,
-) -> impl Responder {
+async fn insert_complaint(state: Data<AppState>, body: web::Query<Complaint>) -> impl Responder {
     let db_pool = &state.get_ref().db;
     query!(
         "INSERT INTO complaint (title,description,status,tags) VALUES ($1, $2, $3, $4)",
