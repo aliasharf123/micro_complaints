@@ -1,10 +1,9 @@
-use actix_web::{get, post, web, web::Data, HttpResponse, Responder};
+use actix_web::{get, post, web, web::{Data, Json}, HttpResponse, Responder};
 use serde::{Serialize, Deserialize};
 use sqlx::{query, query_as};
-
 use crate::model::AppState;
 
-#[derive(Debug, sqlx::Type, Serialize, Deserialize)]
+#[derive(Debug, sqlx::Type, Serialize, Deserialize, Clone)]
 #[sqlx(type_name = "status")]
 #[sqlx(rename_all = "lowercase")]
 enum Status {
@@ -12,7 +11,7 @@ enum Status {
     Taken,
     Closed,
 }
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 struct Complaint {
     id: i64,
     title: String,
