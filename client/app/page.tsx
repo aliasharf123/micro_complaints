@@ -1,4 +1,4 @@
-import Image from "next/image";
+import ComplaintButton from "./components/complaint-button";
 import Navbar from "./components/navrbar";
 import { Button } from "@nextui-org/react";
 
@@ -15,9 +15,7 @@ export default function Home() {
         <p className="font-normal">
           Don&apos;t Be Silent. Take Control. Submit a Complaint Here.
         </p>
-        <Button color="primary" variant="shadow">
-          Make a Complaint
-        </Button>
+        <ComplaintButton />
       </div>
     </div>
   );
