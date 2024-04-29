@@ -1,6 +1,6 @@
 use crate::model::AppState;
 use actix_web::{
-	get, post, web,
+	get, post,
 	web::{Data, Json},
 	HttpResponse, Responder,
 };

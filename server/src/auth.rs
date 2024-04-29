@@ -11,7 +11,8 @@ use google_oauth::{get_google_user, request_token};
 use jsonwebtoken::{encode, EncodingKey, Header};
 use serde_json;
 use sqlx::{query, query_as};
-#[get("/sessions/oauth/google")]
+
+#[get("google")]
 async fn google_oauth_handler(
 	query: web::Query<QueryCode>,
 	data: web::Data<AppState>,
