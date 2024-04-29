@@ -97,7 +97,9 @@ async fn google_oauth_handler(
 		.http_only(true)
 		.finish();
 
-	return HttpResponse::Ok().json(
+	return HttpResponse::Ok()
+		.cookie(cookie)
+		.json(
 		serde_json::json!({"status": "success", "data": "hello from google oauth handler!"}),
 	);
 }
