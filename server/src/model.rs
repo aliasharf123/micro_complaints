@@ -7,7 +7,7 @@ use crate::config;
 #[sqlx(type_name = "role")]
 #[sqlx(rename_all = "lowercase")]
 pub enum Role {
-	Pleb,
+	Complainer,
 	Admin,
 	Support,
 }

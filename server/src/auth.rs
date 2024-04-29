@@ -60,7 +60,7 @@ async fn google_oauth_handler(
             RETURNING id as "id!: i64""#,
 			google_user.name,
 			google_user.email,
-			Role::Pleb as Role,
+			Role::Complainer as Role,
 			Some(google_user.picture)
 		)
 		.fetch_one(db_pool)
