@@ -1,18 +1,16 @@
 mod google_oauth;
-use chrono::{prelude::*, Duration};
-use std::borrow::{Borrow, BorrowMut};
+use chrono::{Duration};
 
-use crate::model::{AppState, QueryCode, RegisterUserSchema, Role, TokenClaims, User};
+use crate::model::{AppState, QueryCode, Role, TokenClaims, User};
 use actix_web::{
 	cookie::{time::Duration as ActixWebDuration, Cookie},
-	get, post, web, HttpResponse, Responder,
+	get, web, HttpResponse, Responder,
 };
 use chrono::Utc;
 use google_oauth::{get_google_user, request_token};
 use jsonwebtoken::{encode, EncodingKey, Header};
 use serde_json;
-use sqlx::{postgres::PgRow, query, query_as};
-use uuid::Uuid;
+use sqlx::{query, query_as};
 #[get("/sessions/oauth/google")]
 async fn google_oauth_handler(
 	query: web::Query<QueryCode>,
@@ -90,7 +88,6 @@ async fn google_oauth_handler(
 		&EncodingKey::from_secret(jwt_secret.as_ref()),
 	)
 	.unwrap();
-
 	let cookie = Cookie::build("token", token)
 		.path("/")
 		.max_age(ActixWebDuration::new(60 * data.env.jwt_max_age, 0))
