@@ -88,6 +88,7 @@ async fn google_oauth_handler(
 		&EncodingKey::from_secret(jwt_secret.as_ref()),
 	)
 	.unwrap();
+
 	let cookie = Cookie::build("token", token)
 		.path("/")
 		.max_age(ActixWebDuration::new(60 * data.env.jwt_max_age, 0))
@@ -102,5 +103,6 @@ async fn google_oauth_handler(
 }
 
 pub fn config(config: &mut web::ServiceConfig) {
-	let scope = web::scope("").service(google_oauth_handler);
+	let scope = web::scope("/sessions/oauth/").service(google_oauth_handler);
+	config.service(scope);
 }
