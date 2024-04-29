@@ -62,19 +62,12 @@ async fn google_oauth_handler(
 			google_user.name,
 			google_user.email,
 			Role::Pleb as Role,
-			Some(google_user.picture.clone())
+			Some(google_user.picture)
 		)
 		.fetch_one(db_pool)
 		.await
 		.expect("this should never happen");
 
-		let user = User {
-			id: result.id,
-			name: google_user.name,
-			email: google_user.email,
-			role: Role::Pleb,
-			photo: Some(google_user.picture),
-		};
         user_id = result.id;
 		// if result.is_err() {}
 	} else {
