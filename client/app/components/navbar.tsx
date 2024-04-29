@@ -15,6 +15,7 @@ import {
   Button,
 } from "@nextui-org/react";
 import ThemeSwitch from "./theme-switch";
+import { usePathname } from "next/navigation";
 const menuItems = [
   "Profile",
   "Dashboard",
@@ -27,9 +28,12 @@ const menuItems = [
   "Help & Feedback",
   "Log Out",
 ];
+const values = ["dashboard", "customers", "integrations"];
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+
   return (
     <NavbarContainer onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent>
@@ -38,30 +42,28 @@ export default function Navbar() {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <AcmeLogo />
-          <p className="font-bold  text-inherit">ACME</p>
+          <Link href="/" className="text-foreground">
+            <AcmeLogo />
+            <p className="font-bold  text-inherit">ACME</p>
+          </Link>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Features
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            Customers
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Integrations
-          </Link>
-        </NavbarItem>
+        {values.map((value, index) => (
+          <NavbarItem key={index}>
+            <Link
+              color={pathname === `/${value}` ? "primary" : "foreground"}
+              href={`/${value}`}
+            >
+              {value[0].toUpperCase()}
+              {value.slice(1)}
+            </Link>
+          </NavbarItem>
+        ))}
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
+        <NavbarItem className="flex">
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">

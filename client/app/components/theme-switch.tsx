@@ -10,7 +10,7 @@ export default function ThemeSwitch(props: any) {
   const { theme, setTheme } = useTheme();
 
   return (
-    <Chip color="default" className="cursor-pointer" variant="light">
+    <Chip color="default" size="sm" className="cursor-pointer" variant="light">
       {theme === "dark" ? (
         <BsMoonFill size={20} onClick={() => setTheme("light")} />
       ) : (
