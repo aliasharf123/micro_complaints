@@ -1,6 +1,6 @@
 import { ScrollShadow } from "@nextui-org/react";
 import ComplaintButton from "./components/complaint-button";
-import Navbar from "./components/navrbar";
+import Navbar from "./components/navbar";
 import Marquee from "react-fast-marquee";
 import Card from "./components/card";
 import { users } from "./utils/mock-data";
@@ -14,7 +14,7 @@ export default function Home() {
         <div className="w-full h-[45vh] z-40  px-3 items-center text-center flex flex-col gap-5 justify-end">
           <div className="flex flex-col gap-1 text-4xl md:text-5xl font-semibold">
             <h1>
-              Fell free to Tell us your <br className="max-sm:hidden" />
+              Feel free to Tell us your <br className="max-sm:hidden" />
               <span className="text-primary">Complaint</span>{" "}
             </h1>
           </div>
