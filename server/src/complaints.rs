@@ -69,3 +69,11 @@ async fn insert_complaint(state: Data<AppState>, complaint: Json<Complaint>) -> 
 	.expect("I shat");
 	HttpResponse::Ok().body("inserted")
 }
+
+pub fn config(config: &mut web::ServiceConfig) {
+	let scope = web::scope("/complaints")
+		.service(insert_complaint)
+		.service(get_closed_complaints)
+		.service(get_complaints);
+	config.service(scope);
+}

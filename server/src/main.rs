@@ -6,7 +6,6 @@ mod model;
 use crate::model::AppState;
 use actix_cors::Cors;
 use actix_web::{http::header, web, App, HttpServer};
-use complaints::get_complaints;
 use dotenvy::dotenv;
 use micro_complaints::*;
 
@@ -31,7 +30,8 @@ async fn main() -> std::io::Result<()> {
 			])
 			.supports_credentials();
 		App::new()
-			.service(get_complaints)
+			.configure(auth::config)
+			.configure(complaints::config)
 			.app_data(app_data.clone())
 			.wrap(cors)
 	})
