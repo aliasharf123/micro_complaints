@@ -16,7 +16,7 @@ import {
 import { EyeIcon } from "../icons/EyeIcon";
 import { EditIcon } from "../icons/EditIcon";
 import { DeleteIcon } from "../icons/DeleteIcon";
-import { columns, users } from "./mockdata";
+import { columns, users } from "../utils/mock-data";
 
 const statusColorMap = {
   active: "success",
