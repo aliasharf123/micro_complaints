@@ -18,7 +18,7 @@ async fn google_oauth_handler(
 	data: web::Data<AppState>,
 ) -> impl Responder {
 	let code = &query.code;
-	let state = &query.state;
+	let state = &query.state; //this is unused...please explain
 
 	if code.is_empty() {
 		return HttpResponse::Unauthorized().json(
