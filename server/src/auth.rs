@@ -1,5 +1,5 @@
 mod google_oauth;
-use chrono::{Duration};
+use chrono::Duration;
 
 use crate::model::{AppState, QueryCode, Role, TokenClaims, User};
 use actix_web::{
@@ -9,7 +9,6 @@ use actix_web::{
 use chrono::Utc;
 use google_oauth::{get_google_user, request_token};
 use jsonwebtoken::{encode, EncodingKey, Header};
-use serde_json;
 use sqlx::{query, query_as};
 
 #[get("google")]
@@ -67,8 +66,8 @@ async fn google_oauth_handler(
 		.await
 		.expect("this should never happen");
 
-        user_id = result.id;
-		// if result.is_err() {}
+		user_id = result.id;
+	// if result.is_err() {}
 	} else {
 		user_id = user.unwrap().id;
 	}
@@ -96,9 +95,7 @@ async fn google_oauth_handler(
 		.http_only(true)
 		.finish();
 
-	return HttpResponse::Ok()
-		.cookie(cookie)
-		.json(
+	return HttpResponse::Ok().cookie(cookie).json(
 		serde_json::json!({"status": "success", "data": "hello from google oauth handler!"}),
 	);
 }
