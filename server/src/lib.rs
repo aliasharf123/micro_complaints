@@ -15,10 +15,9 @@ pub async fn init_dbpool() -> Pool<sqlx::Postgres> {
 	use sqlx::postgres::PgPoolOptions;
 
 	let database_url = env::var("DATABASE_URL").expect("Put a DB url in the .env file dumbass");
-	let pool = PgPoolOptions::new()
+	PgPoolOptions::new()
 		.max_connections(10)
 		.connect(database_url.as_str())
 		.await
-		.expect("No pool connection man :(");
-	pool
+		.expect("Failed to connect to database :(")
 }
