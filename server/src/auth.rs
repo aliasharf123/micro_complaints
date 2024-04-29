@@ -94,10 +94,11 @@ async fn google_oauth_handler(
 		.max_age(ActixWebDuration::new(60 * data.env.jwt_max_age, 0))
 		.http_only(true)
 		.finish();
-
-	return HttpResponse::Ok().cookie(cookie).json(
-		serde_json::json!({"status": "success", "data": "hello from google oauth handler!"}),
-	);
+    let frontend_origin = data.env.client_origin.to_owned();
+    let mut response = HttpResponse::Found();
+    response.append_header((LOCATION, format!("{}{}", frontend_origin, state)));
+    response.cookie(cookie);
+    response.finish()
 }
 
 pub fn config(config: &mut web::ServiceConfig) {
