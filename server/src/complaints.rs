@@ -1,7 +1,7 @@
 use crate::model::AppState;
 use actix_web::{
 	get, post,
-	web::{Data, Json},
+	web::{self, Data, Json},
 	HttpResponse, Responder,
 };
 use serde::{Deserialize, Serialize};
