@@ -8,16 +8,20 @@ use serde::{Deserialize, Serialize};
 use sqlx::{query, query_as};
 
 #[derive(Deserialize)]
-struct GetParams {
-    status: Status,
-    included_users: bool,
+struct Params {
+    status: Option<Status>,
+    included_users: Option<bool>,
 }
 
 #[get("")]
-pub async fn get_complaints(state: Data<AppState>) -> impl Responder {
+pub async fn get_complaints(state: Data<AppState>, query: web::Query<Params>) -> impl Responder {
     let db_pool = &state.get_ref().db;
+    let (status, included_users) = (query.status, query.included_users);
 
-    HttpResponse::Ok().body("open complaints")
+    HttpResponse::Ok().body(format!(
+        "Welcome complaints! status: {:?}, included_users: {:?}",
+        status, included_users
+    ))
 }
 
 #[get("/{id}")]

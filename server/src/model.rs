@@ -60,7 +60,7 @@ pub struct LoginUserSchema {
     pub password: String,
 }
 
-#[derive(Debug, sqlx::Type, Serialize, Deserialize, Clone)]
+#[derive(Debug, sqlx::Type, Serialize, Deserialize, Clone, Copy)]
 #[sqlx(type_name = "status")]
 #[sqlx(rename_all = "lowercase")]
 pub enum Status {
