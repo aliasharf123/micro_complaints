@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO complaint (title, description, status, tags) VALUES ($1, $2, $3, $4)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        {
+          "Custom": {
+            "name": "status",
+            "kind": {
+              "Enum": [
+                "open",
+                "closed",
+                "taken"
+              ]
+            }
+          }
+        },
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "7d40258c928889fa1dc0b3dde49ec6b7270a2347a561537b163c7a84bb66cbd1"
+}
