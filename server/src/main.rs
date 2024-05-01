@@ -14,8 +14,13 @@ async fn main() -> std::io::Result<()> {
 	dotenv().ok();
 
 	let db_pool = init_dbpool().await;
-	let db = AppState::init(db_pool);
-	let app_data = web::Data::new(db);
+	sqlx::migrate!()
+		.run(&db_pool)
+		.await
+		.expect("the migration did not work");
+
+	let app_state = AppState::init(db_pool);
+	let app_data = web::Data::new(app_state);
 
 	println!("🚀 Server started successfully");
 
