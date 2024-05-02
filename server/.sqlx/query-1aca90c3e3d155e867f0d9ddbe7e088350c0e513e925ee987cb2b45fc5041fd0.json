@@ -1,0 +1,36 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO users (name, email, role, photo) VALUES ($1, $2, $3, $4)\n            RETURNING id as \"id!: i64\"",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id!: i64",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        {
+          "Custom": {
+            "name": "role",
+            "kind": {
+              "Enum": [
+                "pleb",
+                "admin",
+                "support"
+              ]
+            }
+          }
+        },
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "1aca90c3e3d155e867f0d9ddbe7e088350c0e513e925ee987cb2b45fc5041fd0"
+}
