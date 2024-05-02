@@ -11,6 +11,7 @@ use chrono::Duration;
 use chrono::Utc;
 use google_oauth::{get_google_user, request_token};
 use jsonwebtoken::{encode, EncodingKey, Header};
+use log::info;
 use reqwest::header::LOCATION;
 use sqlx::{query, query_as};
 
@@ -21,6 +22,8 @@ async fn google_oauth_handler(
 ) -> impl Responder {
     let code = &query.code;
     let state = &query.state;
+
+    info!("User logged in:asda");
 
     if code.is_empty() {
         return HttpResponse::Unauthorized().json(

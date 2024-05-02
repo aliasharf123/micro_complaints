@@ -1,11 +1,9 @@
-use chrono::{DateTime, Utc};
+use crate::config;
+// use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-use crate::config;
-
 #[derive(Debug, sqlx::Type, Serialize, Deserialize, Clone)]
-#[sqlx(type_name = "role")]
-#[sqlx(rename_all = "lowercase")]
+#[sqlx(type_name = "role", rename_all = "lowercase")]
 pub enum Role {
     Complainer,
     Admin,
@@ -61,8 +59,7 @@ pub struct LoginUserSchema {
 }
 
 #[derive(Debug, sqlx::Type, Serialize, Deserialize, Clone, Copy)]
-#[sqlx(type_name = "status")]
-#[sqlx(rename_all = "lowercase")]
+#[sqlx(type_name = "status", rename_all = "lowercase")]
 pub enum Status {
     Open,
     Taken,

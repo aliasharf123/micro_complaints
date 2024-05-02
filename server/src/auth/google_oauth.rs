@@ -49,11 +49,8 @@ pub async fn request_token(
         Ok(oauth_response)
     } else {
         // print!("{:?}", response);
-        let message = response.text().await?;
-        Err(From::from(format!(
-            "{} {} {}",
-            redirect_url, client_secret, client_id
-        )))
+        let message = "An error occurred while trying to retrieve user information.";
+        Err(From::from(message))
     }
 }
 

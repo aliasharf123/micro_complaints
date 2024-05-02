@@ -1474,6 +1474,7 @@ dependencies = [
  "dotenvy",
  "env_logger",
  "jsonwebtoken",
+ "log",
  "reqwest",
  "serde",
  "serde_json",

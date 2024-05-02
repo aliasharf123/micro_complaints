@@ -1,4 +1,4 @@
-CREATE TYPE status AS ENUM ('Open', 'Closed', 'Taken');
+CREATE TYPE status AS ENUM ('open', 'closed', 'taken');
 -- CREATE TYPE tags AS ENUM ('')
 CREATE TABLE IF NOT EXISTS complaint (
   id BIGSERIAL PRIMARY KEY,

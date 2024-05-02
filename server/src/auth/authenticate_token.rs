@@ -1,7 +1,4 @@
-use std::{
-    future::{ready, Future, Ready},
-    pin::Pin,
-};
+use std::{future::Future, pin::Pin};
 
 use actix_web::{
     dev::Payload,
@@ -11,6 +8,7 @@ use actix_web::{
     FromRequest, HttpRequest,
 };
 use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
+use log::info;
 use serde_json::json;
 use sqlx::query_as;
 
@@ -26,6 +24,7 @@ impl FromRequest for AuthenticationGuard {
 
     fn from_request(req: &HttpRequest, _: &mut Payload) -> Self::Future {
         let req = req.clone();
+        info!("{:?}", req.headers());
         Box::pin(async move {
             let token = req
                 .cookie("token")

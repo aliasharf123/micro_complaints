@@ -4,8 +4,13 @@ import Navbar from "./components/navbar";
 import Marquee from "react-fast-marquee";
 import Card from "./components/card";
 import { users } from "./utils/mock-data";
+import { cookies } from "next/headers";
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = cookies();
+  const res = await fetch("http://127.0.0.1:8080/auth/logout");
+
+  console.log(await res.json());
   return (
     <div className="">
       <Navbar />

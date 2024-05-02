@@ -106,7 +106,6 @@ export default function Form({ isSignIn }: { isSignIn?: boolean }) {
 
   const getGoogleUrl = (from: string) => {
     const rootUrl = `https://accounts.google.com/o/oauth2/v2/auth`;
-    console.log(process.env.GOOGLE_OAUTH_CLIENT_ID);
     const options = {
       redirect_uri: "http://127.0.0.1:8080/auth/google" as string,
       client_id:
