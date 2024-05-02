@@ -1,3 +1,4 @@
+use crate::auth::authenticate_token::AuthenticationGuard;
 use crate::model::{AppState, Complaint, Status, UpdatedComplaint};
 use actix_web::{
     delete, get, patch, post,
@@ -6,7 +7,6 @@ use actix_web::{
 };
 use serde::{Deserialize, Serialize};
 use sqlx::{query, query_as};
-
 #[derive(Deserialize)]
 struct Params {
     status: Option<Status>,
@@ -14,7 +14,11 @@ struct Params {
 }
 
 #[get("")]
-pub async fn get_complaints(state: Data<AppState>, query: web::Query<Params>) -> impl Responder {
+pub async fn get_complaints(
+    state: Data<AppState>,
+    query: web::Query<Params>,
+    _: AuthenticationGuard,
+) -> impl Responder {
     let db_pool = &state.get_ref().db;
     let (status, included_users) = (query.status, query.included_users);
 
@@ -25,7 +29,11 @@ pub async fn get_complaints(state: Data<AppState>, query: web::Query<Params>) ->
 }
 
 #[get("/{id}")]
-pub async fn get_complaint_by_id(state: Data<AppState>, path: web::Path<(u32,)>) -> impl Responder {
+pub async fn get_complaint_by_id(
+    state: Data<AppState>,
+    path: web::Path<(u32,)>,
+    _: AuthenticationGuard,
+) -> impl Responder {
     let db_pool = &state.get_ref().db;
     let id = path.into_inner().0;
 
@@ -37,6 +45,7 @@ pub async fn update_complaint(
     state: Data<AppState>,
     path: web::Path<(u32,)>,
     complaint: Json<UpdatedComplaint>,
+    _: AuthenticationGuard,
 ) -> impl Responder {
     let db_pool = &state.get_ref().db;
     let id = path.into_inner().0;
@@ -46,7 +55,11 @@ pub async fn update_complaint(
 }
 
 #[delete("/{id}")]
-pub async fn delete_complaint(state: Data<AppState>, path: web::Path<(u32,)>) -> impl Responder {
+pub async fn delete_complaint(
+    state: Data<AppState>,
+    path: web::Path<(u32,)>,
+    _: AuthenticationGuard,
+) -> impl Responder {
     let db_pool = &state.get_ref().db;
     let id = path.into_inner().0;
 
@@ -54,7 +67,11 @@ pub async fn delete_complaint(state: Data<AppState>, path: web::Path<(u32,)>) ->
 }
 
 #[post("")]
-async fn insert_complaint(state: Data<AppState>, complaint: Json<Complaint>) -> impl Responder {
+async fn insert_complaint(
+    state: Data<AppState>,
+    complaint: Json<Complaint>,
+    _: AuthenticationGuard,
+) -> impl Responder {
     let db_pool = &state.get_ref().db;
     // query!(
     //     r#"INSERT INTO complaint (title, description, status, tags) VALUES ($1, $2, $3, $4)"#,
@@ -76,5 +93,6 @@ pub fn config(config: &mut web::ServiceConfig) {
         .service(update_complaint)
         .service(get_complaint_by_id)
         .service(delete_complaint);
+
     config.service(scope);
 }

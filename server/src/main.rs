@@ -1,4 +1,4 @@
-// mod auth;
+mod auth;
 mod complaints;
 mod config;
 mod model;
@@ -30,7 +30,7 @@ async fn main() -> std::io::Result<()> {
             ])
             .supports_credentials();
         App::new()
-            // .configure(auth::config)
+            .configure(auth::config)
             .configure(complaints::config)
             .app_data(app_data.clone())
             .wrap(cors)
