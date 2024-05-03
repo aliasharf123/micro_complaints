@@ -1,18 +1,19 @@
+use crate::model::AppState;
+use actix_cors::Cors;
+use actix_web::{http::header, middleware::Logger, web, App, HttpServer};
+use dotenvy::dotenv;
+use env_logger::Env;
+use micro_complaints::*;
+
 mod auth;
 mod complaints;
 mod config;
 mod model;
-
-use crate::model::AppState;
-use actix_cors::Cors;
-use actix_web::{http::header, web, App, HttpServer};
-use dotenvy::dotenv;
-use micro_complaints::*;
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
 	dotenv().ok();
 
+	std::env::set_var("RUST_LOG", "debug");
 	let db_pool = init_dbpool().await;
 	sqlx::migrate!()
 		.run(&db_pool)
@@ -39,6 +40,8 @@ async fn main() -> std::io::Result<()> {
 			.configure(complaints::config)
 			.app_data(app_data.clone())
 			.wrap(cors)
+			.wrap(Logger::default())
+			.wrap(Logger::new("%a %{User-Agent}i"))
 	})
 	.bind(init_address())?
 	.run()

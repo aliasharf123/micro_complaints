@@ -103,6 +103,27 @@ export default function Form({ isSignIn }: { isSignIn?: boolean }) {
   //   // end loading
   //   setIsLoading(false);
   // });
+
+  const getGoogleUrl = (from: string) => {
+    const rootUrl = `https://accounts.google.com/o/oauth2/v2/auth`;
+    const options = {
+      redirect_uri: "http://127.0.0.1:8080/auth/google" as string,
+      client_id:
+        "359948012128-jp625msdhmpbsdjihbck7pg5lldtl5m0.apps.googleusercontent.com" as string,
+      access_type: "offline",
+      response_type: "code",
+      prompt: "consent",
+      scope: [
+        "https://www.googleapis.com/auth/userinfo.profile",
+        "https://www.googleapis.com/auth/userinfo.email",
+      ].join(" "),
+      state: from,
+    };
+
+    const qs = new URLSearchParams(options);
+
+    return `${rootUrl}?${qs.toString()}`;
+  };
   return (
     <div className="text-foreground flex w-full max-w-sm flex-col items-center gap-4 p-4">
       <div className="w-full text-left">
@@ -116,7 +137,7 @@ export default function Form({ isSignIn }: { isSignIn?: boolean }) {
         </p>
       </div>
       <div className="flex w-full flex-col gap-2">
-        <Link href="http://localhost:3333/auth/google">
+        <Link href={getGoogleUrl("localhost:3000")}>
           <Button
             className="w-full"
             startContent={<FcGoogle size={23} />}

@@ -1,18 +1,15 @@
-use chrono::{DateTime, Utc};
+use crate::config;
+// use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-use crate::config;
-
 #[derive(Debug, sqlx::Type, Serialize, Deserialize, Clone)]
-#[sqlx(type_name = "role")]
-#[sqlx(rename_all = "lowercase")]
+#[sqlx(type_name = "role", rename_all = "lowercase")]
 pub enum Role {
 	Complainer,
 	Admin,
 	Support,
 }
 
-#[allow(non_snake_case)]
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct User {
 	pub id: i64,
@@ -60,10 +57,26 @@ pub struct LoginUserSchema {
 	pub password: String,
 }
 
-#[allow(non_snake_case)]
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, sqlx::Type, Serialize, Deserialize, Clone, Copy)]
+#[sqlx(type_name = "status", rename_all = "lowercase")]
+pub enum Status {
+	Open,
+	Taken,
+	Closed,
+}
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Complaint {
-	pub id: Option<String>,
-	pub createdAt: Option<DateTime<Utc>>,
-	pub updatedAt: Option<DateTime<Utc>>,
+	pub id: i64,
+	pub title: String,
+	pub description: Option<String>,
+	pub status: Status,
+	pub tags: Option<String>, //Vec<Tags> ?
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct UpdatedComplaint {
+	pub title: Option<String>,
+	pub description: Option<String>,
+	pub status: Option<Status>,
+	pub tags: Option<String>,
 }

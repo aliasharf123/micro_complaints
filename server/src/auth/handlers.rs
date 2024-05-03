@@ -1,16 +1,18 @@
-mod google_oauth;
-use chrono::Duration;
-use reqwest::header::LOCATION;
+use crate::auth::AuthenticationGuard;
 
 use crate::model::{AppState, QueryCode, Role, TokenClaims, User};
 use actix_web::{
 	cookie::{time::Duration as ActixWebDuration, Cookie},
 	get, web, HttpResponse, Responder,
 };
+use chrono::Duration;
 use chrono::Utc;
-use google_oauth::{get_google_user, request_token};
+use super::google_oauth::{get_google_user, request_token};
 use jsonwebtoken::{encode, EncodingKey, Header};
+use log::info;
+use reqwest::header::LOCATION;
 use sqlx::{query, query_as};
+
 
 #[get("google")]
 async fn google_oauth_handler(
@@ -18,7 +20,9 @@ async fn google_oauth_handler(
 	data: web::Data<AppState>,
 ) -> impl Responder {
 	let code = &query.code;
-	let state = &query.state; //this is unused...please explain
+	let state = &query.state;
+
+	info!("User logged in:asda");
 
 	if code.is_empty() {
 		return HttpResponse::Unauthorized().json(
@@ -102,7 +106,16 @@ async fn google_oauth_handler(
 	response.finish()
 }
 
-pub fn config(config: &mut web::ServiceConfig) {
-	let scope = web::scope("/sessions/oauth/").service(google_oauth_handler);
-	config.service(scope);
+#[get("/logout")]
+async fn logout_handler(_: AuthenticationGuard) -> impl Responder {
+	let cookie = Cookie::build("token", "")
+		.path("/")
+		.max_age(ActixWebDuration::new(-1, 0))
+		.http_only(true)
+		.finish();
+
+	HttpResponse::Ok()
+		.cookie(cookie)
+		.json(serde_json::json!({"status": "success"}))
 }
+
