@@ -2,6 +2,8 @@ use actix_web::test;
 use dotenvy::dotenv;
 use micro_complaints::init_dbpool;
 
+use crate::model::AppState;
+
 use super::*;
 
 #[actix_web::test]
