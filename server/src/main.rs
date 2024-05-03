@@ -5,6 +5,10 @@ use dotenvy::dotenv;
 use env_logger::Env;
 use micro_complaints::*;
 
+mod auth;
+mod complaints;
+mod config;
+mod model;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
 	dotenv().ok();

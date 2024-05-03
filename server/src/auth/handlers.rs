@@ -1,7 +1,4 @@
-pub mod authenticate_token;
-mod google_oauth;
-
-use self::authenticate_token::AuthenticationGuard;
+use super::authenticate_token::AuthenticationGuard;
 use crate::model::{AppState, QueryCode, Role, TokenClaims, User};
 use actix_web::{
 	cookie::{time::Duration as ActixWebDuration, Cookie},
@@ -9,11 +6,12 @@ use actix_web::{
 };
 use chrono::Duration;
 use chrono::Utc;
-use google_oauth::{get_google_user, request_token};
+use super::google_oauth::{get_google_user, request_token};
 use jsonwebtoken::{encode, EncodingKey, Header};
 use log::info;
 use reqwest::header::LOCATION;
 use sqlx::{query, query_as};
+
 
 #[get("google")]
 async fn google_oauth_handler(
@@ -120,9 +118,3 @@ async fn logout_handler(_: AuthenticationGuard) -> impl Responder {
 		.json(serde_json::json!({"status": "success"}))
 }
 
-pub fn config(config: &mut web::ServiceConfig) {
-	let scope = web::scope("/auth")
-		.service(google_oauth_handler)
-		.service(logout_handler);
-	config.service(scope);
-}
