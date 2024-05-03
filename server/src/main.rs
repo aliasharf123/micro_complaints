@@ -14,10 +14,10 @@ use micro_complaints::*;
 async fn main() -> std::io::Result<()> {
 	dotenv().ok();
 
-    std::env::set_var("RUST_LOG", "debug");
+	std::env::set_var("RUST_LOG", "debug");
 	let db_pool = init_dbpool().await;
-	let db = AppState::init(db_pool);
-	let app_data = web::Data::new(db);
+	let app_state = AppState::init(db_pool);
+	let app_data = web::Data::new(app_state);
 	env_logger::init_from_env(Env::default().default_filter_or("info"));
 
 	println!("🚀 Server started successfully");

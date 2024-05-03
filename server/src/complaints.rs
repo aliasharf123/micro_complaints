@@ -79,7 +79,7 @@ async fn insert_complaint(
 		r#"INSERT INTO complaint (title, description, status, tags) VALUES ($1, $2, $3, $4)"#,
 		complaint.title,
 		complaint.description,
-		complaint.clone().status as Status, //why this wanted a clone but aight
+		complaint.status as Status, //why this wanted a clone but aight
 		complaint.tags
 	)
 	.execute(db_pool)
