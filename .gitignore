@@ -1,5 +1,4 @@
 .env
-/target/
-.env
 /server/.env.bak
 /server/.env.pain
+/target/
