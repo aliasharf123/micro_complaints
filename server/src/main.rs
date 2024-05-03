@@ -14,6 +14,7 @@ use micro_complaints::*;
 async fn main() -> std::io::Result<()> {
 	dotenv().ok();
 
+    std::env::set_var("RUST_LOG", "debug");
 	let db_pool = init_dbpool().await;
 	let db = AppState::init(db_pool);
 	let app_data = web::Data::new(db);
