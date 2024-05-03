@@ -4,7 +4,7 @@ use self::handlers::*;
 
 mod handlers;
 #[cfg(test)]
-mod tests;
+mod test;
 pub fn config(config: &mut web::ServiceConfig) {
 	let scope = web::scope("/complaints")
 		.service(post_complaint)
