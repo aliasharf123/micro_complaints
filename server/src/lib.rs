@@ -1,3 +1,8 @@
+mod auth;
+mod complaints;
+mod config;
+mod model;
+
 use std::env;
 
 pub fn init_address() -> (String, u16) {
