@@ -137,7 +137,7 @@ export default function Form({ isSignIn }: { isSignIn?: boolean }) {
         </p>
       </div>
       <div className="flex w-full flex-col gap-2">
-        <Link href={getGoogleUrl("localhost:3000")}>
+        <Link href={getGoogleUrl("/")}>
           <Button
             className="w-full"
             startContent={<FcGoogle size={23} />}

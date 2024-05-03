@@ -11,39 +11,41 @@ mod config;
 mod model;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-	dotenv().ok();
+    dotenv().ok();
 
-	std::env::set_var("RUST_LOG", "debug");
-	let db_pool = init_dbpool().await;
-	sqlx::migrate!()
-		.run(&db_pool)
-		.await
-		.expect("the migration did not work");
+    std::env::set_var("RUST_LOG", "debug");
+    env_logger::init();
 
-	let app_state = AppState::init(db_pool);
-	let app_data = web::Data::new(app_state);
+    let db_pool = init_dbpool().await;
+    sqlx::migrate!()
+        .run(&db_pool)
+        .await
+        .expect("the migration did not work");
 
-	println!("🚀 Server started successfully");
+    let app_state = AppState::init(db_pool);
+    let app_data = web::Data::new(app_state);
 
-	HttpServer::new(move || {
-		let cors = Cors::default()
-			.allow_any_origin()
-			.allowed_methods(vec!["GET", "POST"])
-			.allowed_headers(vec![
-				header::CONTENT_TYPE,
-				header::AUTHORIZATION,
-				header::ACCEPT,
-			])
-			.supports_credentials();
-		App::new()
-			.configure(auth::config)
-			.configure(complaints::config)
-			.app_data(app_data.clone())
-			.wrap(cors)
-			.wrap(Logger::default())
-			.wrap(Logger::new("%a %{User-Agent}i"))
-	})
-	.bind(init_address())?
-	.run()
-	.await
+    println!("🚀 Server started successfully");
+
+    HttpServer::new(move || {
+        let cors = Cors::default()
+            .allow_any_origin()
+            .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+            .allowed_headers(vec![
+                header::CONTENT_TYPE,
+                header::AUTHORIZATION,
+                header::ACCEPT,
+            ])
+            .supports_credentials();
+        App::new()
+            .configure(auth::config)
+            .configure(complaints::config)
+            .app_data(app_data.clone())
+            .wrap(cors)
+            .wrap(Logger::default())
+            .wrap(Logger::new("%a %{User-Agent}i"))
+    })
+    .bind(init_address())?
+    .run()
+    .await
 }
