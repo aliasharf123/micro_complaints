@@ -1,4 +1,4 @@
-use sqlx::{query, PgPool, query_as};
+use sqlx::{query, query_as, PgPool};
 
 use crate::model::{Complaint, Status};
 
@@ -15,7 +15,17 @@ pub async fn insert_complaint(complaint: Complaint, db_pool: &PgPool) {
 	.expect("I shat");
 }
 
-pub async fn get_complaints(db_pool: &PgPool) -> Vec<Complaint> {
+pub async fn select_everything(db_pool: &PgPool) -> Vec<Complaint> {
+	query_as!(
+		Complaint,
+		r#"SELECT id, title, description, status as "status!: Status", tags FROM complaint WHERE status='open'"#
+	)
+    .fetch_all(db_pool)
+    .await
+    .expect("Could not fetch complaints")
+}
+
+pub async fn select_exclude_users(db_pool: &PgPool) -> Vec<Complaint> {
 	query_as!(
 		Complaint,
 		r#"SELECT id, title, description, status as "status!: Status", tags FROM complaint WHERE status='open'"#
