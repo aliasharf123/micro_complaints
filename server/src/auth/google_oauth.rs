@@ -49,7 +49,7 @@ pub async fn request_token(
 		Ok(oauth_response)
 	} else {
 		// print!("{:?}", response);
-		let message = "An error occurred while trying to retrieve user information.";
+		let message = "Could not fetch token for some cursed reason";
 		Err(From::from(message))
 	}
 }
@@ -70,7 +70,7 @@ pub async fn get_google_user(
 		let google_user = response.json::<GoogleUserResult>().await?;
 		Ok(google_user)
 	} else {
-		let message = "An error occurred while trying to retrieve user information.";
+		let message = "Couldn't get google user";
 		Err(From::from(message))
 	}
 }
