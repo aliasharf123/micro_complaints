@@ -14,9 +14,8 @@ use sqlx::query_as;
 
 use crate::model::{AppState, Role, TokenClaims, User};
 
-pub struct AuthenticationGuard {
-	pub user: User,
-}
+use super::AuthenticationGuard;
+
 
 impl FromRequest for AuthenticationGuard {
 	type Error = actix_web::Error;
