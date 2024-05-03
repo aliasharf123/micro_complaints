@@ -7,7 +7,7 @@ use actix_web::{
 };
 use log::info;
 use serde::Deserialize;
-use sqlx::{query, query_as};
+use sqlx::query;
 #[derive(Deserialize)]
 struct Params {
 	status: Option<Status>,

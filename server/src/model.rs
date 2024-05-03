@@ -10,7 +10,6 @@ pub enum Role {
 	Support,
 }
 
-#[allow(non_snake_case)]
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct User {
 	pub id: i64,
