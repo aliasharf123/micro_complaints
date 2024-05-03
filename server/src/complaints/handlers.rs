@@ -1,6 +1,6 @@
-use crate::auth::AuthenticationGuard;
-use crate::complaints::queries::{insert_complaint, select_everything, select_exclude_users};
-use crate::model::{AppState, Complaint, Status, UpdatedComplaint};
+use crate::auth::{authenticate_token, AuthenticationGuard};
+use crate::complaints::queries::*;
+use crate::model::{AppState, Complaint, CreatedComplaint, Status, UpdatedComplaint};
 use actix_web::{
     delete, get, patch, post,
     web::{self, Data, Json},
@@ -34,14 +34,16 @@ pub async fn get_all(
 #[get("/{id}")]
 pub async fn get_id(
     state: Data<AppState>,
-    path: web::Path<(u32,)>,
-    authentication_guard: AuthenticationGuard,
+    path: web::Path<(i64,)>,
+    _db_pool: AuthenticationGuard,
 ) -> impl Responder {
     let _db_pool = &state.get_ref().db;
     let id = path.into_inner().0;
-    let user = authentication_guard.user;
+    let complaint = select_by_id(_db_pool, id).await;
 
-    HttpResponse::Ok().body(format!("Welcome complaint! id: {}", id))
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .json(complaint)
 }
 
 #[patch("/{id}")]
@@ -61,24 +63,26 @@ pub async fn patch_id(
 #[delete("/{id}")]
 pub async fn delete_id(
     state: Data<AppState>,
-    path: web::Path<(u32,)>,
+    path: web::Path<(i64,)>,
     _: AuthenticationGuard,
 ) -> impl Responder {
-    let _db_pool = &state.get_ref().db;
+    let db_pool = &state.get_ref().db;
     let id = path.into_inner().0;
-    info!("User logged in:asda");
 
+    delete(db_pool, id).await;
     HttpResponse::Ok().body(format!("Deleted complaint! id: {}", id))
 }
 
 #[post("")]
 async fn post_complaint(
     state: Data<AppState>,
-    complaint: Json<Complaint>,
-    _: AuthenticationGuard,
+    complaint: Json<CreatedComplaint>,
+    authenticate_token: AuthenticationGuard,
 ) -> impl Responder {
     let db_pool = &state.get_ref().db;
-    let complaint: Complaint = complaint.into_inner();
-    insert_complaint(complaint, db_pool).await;
+    let complaint: CreatedComplaint = complaint.into_inner();
+    let user = authenticate_token.user;
+
+    insert_complaint(complaint, db_pool, user.id).await;
     HttpResponse::Ok().body("inserted")
 }
