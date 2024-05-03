@@ -1,4 +1,4 @@
-use crate::auth::authenticate_token::AuthenticationGuard;
+use crate::auth::AuthenticationGuard;
 use crate::complaints::queries::{insert_complaint, select_everything, select_exclude_users};
 use crate::model::{AppState, Complaint, Status, UpdatedComplaint};
 use actix_web::{
