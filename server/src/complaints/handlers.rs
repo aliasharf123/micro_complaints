@@ -1,5 +1,5 @@
 use crate::auth::authenticate_token::AuthenticationGuard;
-use crate::complaints::queries::insert_complaint;
+use crate::complaints::queries::{insert_complaint, select_everything, select_exclude_users};
 use crate::model::{AppState, Complaint, Status, UpdatedComplaint};
 use actix_web::{
 	delete, get, patch, post,
@@ -11,7 +11,7 @@ use serde::Deserialize;
 #[derive(Deserialize)]
 struct Params {
 	status: Option<Status>,
-	included_users: Option<bool>,
+	included_users: bool,
 }
 #[get("")]
 pub async fn get_all(
@@ -19,13 +19,16 @@ pub async fn get_all(
 	query: web::Query<Params>,
 	_: AuthenticationGuard,
 ) -> impl Responder {
-	let _db_pool = &state.get_ref().db;
+	let db_pool = &state.get_ref().db;
 	let (status, included_users) = (query.status, query.included_users);
+	let complaints: Vec<Complaint> = match included_users {
+		true => select_everything(db_pool).await,
+		false => select_exclude_users(db_pool).await,
+	};
 
-	HttpResponse::Ok().body(format!(
-		"Welcome complaints! status: {:?}, included_users: {:?}",
-		status, included_users
-	))
+	HttpResponse::Ok()
+		.content_type("application/json")
+		.json(complaints)
 }
 
 #[get("/{id}")]
