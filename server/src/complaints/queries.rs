@@ -1,6 +1,6 @@
 use sqlx::{query, query_as, PgPool};
 
-use crate::model::{Complaint, CreatedComplaint, Status, UpdatedComplaint};
+use crate::model::{Complaint, ComplaintWithAuthor, CreatedComplaint, Status, UpdatedComplaint};
 
 pub async fn insert_complaint(complaint: CreatedComplaint, db_pool: &PgPool, user_id: i64) {
     query!(
@@ -16,11 +16,11 @@ pub async fn insert_complaint(complaint: CreatedComplaint, db_pool: &PgPool, use
     .expect("I shat");
 }
 
-pub async fn select_everything(db_pool: &PgPool) -> Vec<Complaint> {
+pub async fn select_everything(db_pool: &PgPool) -> Vec<ComplaintWithAuthor> {
     query_as!(
-		Complaint,
-		r#"SELECT id, title, description, status as "status!: Status", tags FROM complaint WHERE status='open'"#
-	)
+        ComplaintWithAuthor,
+        r#"SELECT id, title, description, status as "status!: Status", tags, author as author_id FROM complaint "#
+    )
     .fetch_all(db_pool)
     .await
     .expect("Could not fetch complaints")

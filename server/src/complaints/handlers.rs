@@ -1,6 +1,7 @@
-use crate::auth::{authenticate_token, AuthenticationGuard};
+use crate::auth::AuthenticationGuard;
 use crate::complaints::queries::*;
-use crate::model::{AppState, Complaint, CreatedComplaint, Status, UpdatedComplaint};
+use crate::model::{AppState, CreatedComplaint, Status, UpdatedComplaint};
+use actix_web::Either;
 use actix_web::{
     delete, get, patch, post,
     web::{self, Data, Json},
@@ -21,14 +22,14 @@ pub async fn get_all(
 ) -> impl Responder {
     let db_pool = &state.get_ref().db;
     let (status, included_users) = (query.status, query.included_users);
-    let complaints: Vec<Complaint> = match included_users {
-        true => select_everything(db_pool).await,
-        false => select_exclude_users(db_pool).await,
-    };
-
-    HttpResponse::Ok()
-        .content_type("application/json")
-        .json(complaints)
+    match included_users {
+        true => HttpResponse::Ok()
+            .content_type("application/json")
+            .json(select_everything(db_pool).await),
+        false => HttpResponse::Ok()
+            .content_type("application/json")
+            .json(select_exclude_users(db_pool).await),
+    }
 }
 
 #[get("/{id}")]

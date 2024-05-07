@@ -72,6 +72,17 @@ pub struct Complaint {
     pub status: Status,
     pub tags: Option<String>, //Vec<Tags> ?
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct ComplaintWithAuthor {
+    pub id: i64,
+    pub title: String,
+    pub description: Option<String>,
+    pub status: Status,
+    pub tags: Option<String>, //Vec<Tags> ?
+    pub author_id: i64,
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CreatedComplaint {
     pub title: String,
