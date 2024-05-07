@@ -5,6 +5,7 @@ use dotenvy::dotenv;
 use env_logger::Env;
 use micro_complaints::*;
 
+mod mail;
 mod auth;
 mod complaints;
 mod config;
