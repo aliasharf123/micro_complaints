@@ -8,9 +8,9 @@ import { cookies } from "next/headers";
 
 export default async function Home() {
   const cookieStore = cookies();
-  const res = await fetch("http://127.0.0.1:8080/auth/logout");
+  // const res = await fetch("http://127.0.0.1:8080/auth/logout");
 
-  console.log(await res.json());
+  // console.log(await res.json());
   return (
     <div className="">
       <Navbar />
