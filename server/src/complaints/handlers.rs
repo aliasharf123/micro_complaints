@@ -43,15 +43,16 @@ pub async fn get_id(
 #[patch("/{id}")]
 pub async fn patch_id(
     state: Data<AppState>,
-    path: web::Path<(u32,)>,
+    path: web::Path<(i64,)>,
     complaint: Json<UpdatedComplaint>,
     _: AuthenticationGuard,
 ) -> impl Responder {
-    let _db_pool = &state.get_ref().db;
+    let db_pool = &state.get_ref().db;
     let id = path.into_inner().0;
 
-    print!("{}", id);
-    HttpResponse::Ok().body(format!("Updated complaint! id: {:?}", complaint))
+    update(db_pool, complaint.into_inner(), id).await;
+
+    HttpResponse::Ok().body(format!("Updated complaint! id: {:?}", id))
 }
 
 #[delete("/{id}")]

@@ -1,7 +1,7 @@
 use log::info;
 use sqlx::{query, query_as, PgPool};
 
-use crate::model::{Complaint, ComplaintWithAuthor, CreatedComplaint, Status, UpdatedComplaint};
+use crate::model::{Complaint, CreatedComplaint, Status, UpdatedComplaint};
 
 pub async fn insert_complaint(complaint: CreatedComplaint, db_pool: &PgPool, user_id: i64) {
     query!(
@@ -35,17 +35,14 @@ pub async fn delete(db_pool: &PgPool, id: i64) {
 }
 
 pub async fn update(db_pool: &PgPool, update_complaint: UpdatedComplaint, id: i64) {
-    // query!(
-    //     r#"UPDATE complaint SET title = $1, description = $2, status = $3, tags = $4 WHERE id = $5"#,
-    //     update_complaint.title,
-    //     update_complaint.description,
-    //     update_complaint.status as Status,
-    //     update_complaint.tags,
-    //     id
-    // )
-    // .execute(db_pool)
-    // .await
-    // .expect("Failed to update complaint");
+    query!(
+        r#"UPDATE complaint SET status = $1 WHERE id = $2"#,
+        update_complaint.status as Status,
+        id
+    )
+    .execute(db_pool)
+    .await
+    .expect("Failed to update complaint");
 }
 
 pub async fn select(db_pool: &PgPool, status: Option<Status>) -> Vec<Complaint> {
