@@ -1,3 +1,4 @@
+use log::info;
 use sqlx::{query, query_as, PgPool};
 
 use crate::model::{Complaint, ComplaintWithAuthor, CreatedComplaint, Status, UpdatedComplaint};
@@ -7,23 +8,13 @@ pub async fn insert_complaint(complaint: CreatedComplaint, db_pool: &PgPool, use
         r#"INSERT INTO complaint (title, description, status, tags, author) VALUES ($1, $2, $3, $4, $5)"#,
         complaint.title,
         complaint.description,
-        complaint.status as Status, //why this wanted a clone but aight
+        complaint.status as Status, //why this wanted a clone but alright
         complaint.tags,
         user_id
     )
     .execute(db_pool)
     .await
     .expect("I shat");
-}
-
-pub async fn select_everything(db_pool: &PgPool) -> Vec<ComplaintWithAuthor> {
-    query_as!(
-        ComplaintWithAuthor,
-        r#"SELECT id, title, description, status as "status!: Status", tags, author as author_id FROM complaint "#
-    )
-    .fetch_all(db_pool)
-    .await
-    .expect("Could not fetch complaints")
 }
 
 pub async fn select_by_id(db_pool: &PgPool, id: i64) -> Complaint {
@@ -57,11 +48,15 @@ pub async fn update(db_pool: &PgPool, update_complaint: UpdatedComplaint, id: i6
     // .expect("Failed to update complaint");
 }
 
-pub async fn select_exclude_users(db_pool: &PgPool) -> Vec<Complaint> {
-    query_as!(
-		Complaint,
-		r#"SELECT id, title, description, status as "status!: Status", tags FROM complaint WHERE status='open'"#
-	)
+pub async fn select(db_pool: &PgPool, status: Option<Status>) -> Vec<Complaint> {
+    let mut query_str =
+        String::from(r#"SELECT id, title, description, status, tags FROM complaint"#);
+    if let Some(n) = status {
+        query_str.push_str(" WHERE status = $1");
+        sqlx::query_as(query_str.as_str()).bind(n as Status)
+    } else {
+        sqlx::query_as(&query_str)
+    }
     .fetch_all(db_pool)
     .await
     .expect("Could not fetch complaints")

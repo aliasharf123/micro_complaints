@@ -64,7 +64,7 @@ pub enum Status {
     Taken,
     Closed,
 }
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
 pub struct Complaint {
     pub id: i64,
     pub title: String,
