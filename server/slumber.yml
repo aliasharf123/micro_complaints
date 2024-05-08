@@ -1,0 +1,19 @@
+profiles:
+  local:
+    data:
+      mailHost: http://localhost:8081
+      actixHost: http://localhost:8080
+  # production:
+    # data:
+      # host: https://myfishes.fish
+
+# body: {"mail_subject": "somevalue", ""}
+requests:
+  test_mail: !request
+    method: POST
+    url: "{{mailHost}}/mail/send"
+    body: >
+      {"subject": "TESTING ATTENTION PLEASE", "body": "HERE'S MY TEN CENTS, MY TWO CENTS FREE", "mailRecipient": "linlysmolworthy@gmail.com"}
+
+    headers:
+      Content-Type: "application/json"
