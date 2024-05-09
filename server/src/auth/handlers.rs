@@ -118,3 +118,8 @@ async fn logout_handler(_: AuthenticationGuard) -> impl Responder {
         .cookie(cookie)
         .json(serde_json::json!({"status": "success"}))
 }
+
+#[get("/me")]
+async fn me_handler(authenticate_token: AuthenticationGuard) -> impl Responder {
+    HttpResponse::Ok().json(authenticate_token.user)
+}
