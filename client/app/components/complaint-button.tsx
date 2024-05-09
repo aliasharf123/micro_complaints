@@ -10,14 +10,22 @@ import {
   Textarea,
   useDisclosure,
 } from "@nextui-org/react";
+import { getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function ComplaintButton() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const token = getCookie("token");
+  const router = useRouter();
 
+  const handleClick = () => {
+    if (!token) router.push("/auth/signup");
+    onOpen();
+  };
   return (
     <>
-      <Button color="primary" onClick={onOpen} variant="shadow">
+      <Button color="primary" onClick={handleClick} variant="shadow">
         Make a Complaint
       </Button>
       <Modal backdrop="blur" size="lg" isOpen={isOpen} onClose={onClose}>

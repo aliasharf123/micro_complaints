@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
     if (!token) {
       return NextResponse.redirect(new URL("/auth/signup", request.url));
     }
-    const res = await fetch(`${process.env.SERVER_URL}/auth/me`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/me`, {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
