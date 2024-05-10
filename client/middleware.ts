@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
     const user: User = await res.json();
 
     if (user.role.toLowerCase() == Role.Complainer.toLocaleLowerCase()) {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/not-authorized", request.url));
     }
   }
 
