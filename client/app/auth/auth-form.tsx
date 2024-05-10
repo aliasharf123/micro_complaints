@@ -56,7 +56,6 @@ export default function Form({ isSignIn }: { isSignIn?: boolean }) {
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),

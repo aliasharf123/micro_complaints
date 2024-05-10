@@ -1,7 +1,7 @@
 "use client";
 
 import { Chip } from "@nextui-org/react";
-import React from "react";
+import React, { useState } from "react";
 import { PiSunDimFill } from "react-icons/pi";
 import { BsMoonFill } from "react-icons/bs";
 import { useTheme } from "next-themes";
