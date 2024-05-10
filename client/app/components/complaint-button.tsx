@@ -17,6 +17,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { Complaint } from "../utils";
+import { message, theme as antTheme, ConfigProvider } from "antd";
+import { useTheme } from "next-themes";
 
 const schema = yup
   .object({
@@ -28,6 +30,9 @@ const schema = yup
 export default function ComplaintButton() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const token = getCookie("token");
+  const { defaultAlgorithm, darkAlgorithm } = antTheme;
+  const { theme } = useTheme();
+
   const router = useRouter();
   const {
     register,
@@ -39,10 +44,18 @@ export default function ComplaintButton() {
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [messageApi, contextHolder] = message.useMessage();
 
   const handleClick = () => {
     if (!token) router.push("/auth/signup");
     onOpen();
+  };
+
+  const success = () => {
+    messageApi.open({
+      type: "success",
+      content: "Complaint added successfully!",
+    });
   };
 
   const submitForm = handleSubmit(async (data) => {
@@ -76,11 +89,19 @@ export default function ComplaintButton() {
     setIsLoading(false);
     data.description = "";
     data.title = "";
+    success();
     onClose();
   });
 
   return (
     <>
+      <ConfigProvider
+        theme={{
+          algorithm: theme == "dark" ? darkAlgorithm : defaultAlgorithm,
+        }}
+      >
+        {contextHolder}
+      </ConfigProvider>
       <Button color="primary" onClick={handleClick} variant="shadow">
         Make a Complaint
       </Button>
