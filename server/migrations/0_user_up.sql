@@ -8,3 +8,11 @@ CREATE TABLE IF NOT EXISTS users (
   email TEXT NOT NULL UNIQUE, -- Add UNIQUE constraint for unique email addresses
   photo Text
 );
+CREATE OR REPLACE FUNCTION is_support(bigint) RETURNS boolean
+       AS
+       $func$
+        BEGIN
+              RETURN (SELECT role FROM users WHERE id = $1) = 'support';
+        END
+       $func$
+       LANGUAGE plpgsql;
