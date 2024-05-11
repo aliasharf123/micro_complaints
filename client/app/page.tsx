@@ -1,6 +1,5 @@
 import { ScrollShadow } from "@nextui-org/react";
 import ComplaintButton from "./components/complaint-button";
-import Navbar from "./components/navbar";
 import Marquee from "react-fast-marquee";
 import Card from "./components/card";
 import { users } from "./utils/mock-data";
@@ -13,7 +12,6 @@ export default async function Home() {
   // console.log(await res.json());
   return (
     <div className="">
-      <Navbar />
       <div className="flex flex-col gap-8">
         {/* Main Text */}
         <div className="w-full h-[45vh] z-40  px-3 items-center text-center flex flex-col gap-5 justify-end">

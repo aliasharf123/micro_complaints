@@ -41,6 +41,7 @@ export default function Navbar() {
   const authStore = useAuthStore();
   const user = authStore.authUser;
   const token = getCookie("token");
+  const pathName = usePathname();
 
   const fetchUser = async () => {
     try {
@@ -94,7 +95,10 @@ export default function Navbar() {
   }, [token]);
 
   return (
-    <NavbarContainer onMenuOpenChange={setIsMenuOpen}>
+    <NavbarContainer
+      className={`${pathName.includes("auth") && "hidden"}`}
+      onMenuOpenChange={setIsMenuOpen}
+    >
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}

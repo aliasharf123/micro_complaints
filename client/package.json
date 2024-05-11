@@ -16,6 +16,7 @@
     "antd": "^5.17.0",
     "cookies-next": "^4.1.1",
     "framer-motion": "^11.1.7",
+    "leiten-zustand": "^1.5.9",
     "next": "14.2.3",
     "next-themes": "^0.3.0",
     "react": "^18",
