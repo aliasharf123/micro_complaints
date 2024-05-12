@@ -73,11 +73,11 @@ pub(super) async fn delete_id(
 async fn post_complaint(
 	state: Data<AppState>,
 	complaint: Json<CreatedComplaint>,
-	authenticate_token: AuthenticationGuard,
+	auth_token: AuthenticationGuard,
 ) -> impl Responder {
 	let db_pool = &state.get_ref().db;
 	let complaint: CreatedComplaint = complaint.into_inner();
-	let user = authenticate_token.user;
+	let user = auth_token.user;
 
 	let complaint_id = insert_complaint(complaint, db_pool, user.id).await;
 	let mail_subject: String = String::from("Complaint Confirmation");
