@@ -12,7 +12,9 @@ pub fn config(config: &mut web::ServiceConfig) {
 		.service(get_all)
 		.service(patch_id)
 		.service(get_id)
-		.service(delete_id);
+		.service(delete_id)
+		.service(claim_complaint)
+		.service(close_complaint);
 
 	config.service(scope);
 }

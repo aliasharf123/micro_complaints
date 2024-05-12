@@ -116,3 +116,20 @@ async fn close_complaint(
 	update(db_pool, Status::Closed, &complaint_id).await;
 	response.body("Authorised")
 }
+#[post("claim")]
+async fn claim_complaint(
+	state: Data<AppState>,
+	complaint_id: Data<i64>,
+	auth_token: AuthenticationGuard,
+) -> impl Responder {
+	let db_pool = &state.get_ref().db;
+	let user = auth_token.user;
+	let mut response = match user.role {
+    Role::Complainer => HttpResponse::Forbidden(),
+		_ => HttpResponse::Ok(),
+	};
+
+	update(db_pool, Status::Taken, &complaint_id).await;
+	response.body("Authorised")
+
+}

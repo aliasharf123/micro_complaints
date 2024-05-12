@@ -73,6 +73,7 @@ pub struct Complaint {
 	pub tags: Option<String>, //Vec<Tags> ?
 }
 
+//Sewelam will nuke these redundant structs
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CreatedComplaint {
 	pub title: String,
@@ -81,7 +82,7 @@ pub struct CreatedComplaint {
 	pub tags: Option<String>, //Vec<Tags> ?
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct UpdatedComplaint {
-	pub status: Status,
-}
+// #[derive(Debug, Serialize, Deserialize, Clone)]
+// pub struct UpdatedComplaint {
+// 	pub status: Status,
+// }
