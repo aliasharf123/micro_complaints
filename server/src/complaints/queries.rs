@@ -13,7 +13,7 @@ pub (super) async fn insert_complaint(complaint: CreatedComplaint, db_pool: &PgP
     )
     .fetch_one(db_pool)
     .await
-    .expect("I shat").id
+    .expect("Could not insert complaint").id
 }
 
 pub (super) async fn select_by_id(db_pool: &PgPool, id: i64) -> Complaint {
