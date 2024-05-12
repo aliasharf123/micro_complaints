@@ -1,10 +1,9 @@
 #[cfg(test)]
 mod tests;
 
-
 use reqwest::{Client, Response};
 use serde::Serialize;
-use std::{env};
+use std::env;
 
 #[allow(non_snake_case)]
 #[derive(Serialize)]

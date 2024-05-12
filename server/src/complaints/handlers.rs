@@ -13,7 +13,7 @@ struct Params {
 	status: Option<Status>,
 }
 #[get("")]
-pub (super) async fn get_all(
+pub(super) async fn get_all(
 	state: Data<AppState>,
 	query: web::Query<Params>,
 	_: AuthenticationGuard,
@@ -27,7 +27,7 @@ pub (super) async fn get_all(
 }
 
 #[get("/{id}")]
-pub (super) async fn get_id(
+pub(super) async fn get_id(
 	state: Data<AppState>,
 	path: web::Path<(i64,)>,
 	_db_pool: AuthenticationGuard,
@@ -42,7 +42,7 @@ pub (super) async fn get_id(
 }
 
 #[patch("/{id}")]
-pub (super) async fn patch_id(
+pub(super) async fn patch_id(
 	state: Data<AppState>,
 	path: web::Path<(i64,)>,
 	complaint: Json<UpdatedComplaint>,
@@ -57,7 +57,7 @@ pub (super) async fn patch_id(
 }
 
 #[delete("/{id}")]
-pub (super) async fn delete_id(
+pub(super) async fn delete_id(
 	state: Data<AppState>,
 	path: web::Path<(i64,)>,
 	_: AuthenticationGuard,

@@ -6,7 +6,7 @@ mod queries;
 mod test;
 
 pub fn config(config: &mut web::ServiceConfig) {
-	let scope = web::scope("/users");
+	let scope = web::scope("/users").service(handlers::get_id);
 
 	config.service(scope);
 }

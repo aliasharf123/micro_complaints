@@ -1,10 +1,13 @@
-use actix_web::{HttpResponse, get, web::{self, Data}, Responder};
+use actix_web::{
+	get,
+	web::{self, Data},
+	HttpResponse, Responder,
+};
 
-use crate::{model::AppState, users::queries::select_by_id, auth::AuthenticationGuard};
-
+use crate::{auth::AuthenticationGuard, model::AppState, users::queries::select_by_id};
 
 #[get("/{id}")]
-pub (super) async fn get_id(
+pub(super) async fn get_id(
 	state: Data<AppState>,
 	path: web::Path<(i64,)>,
 	_db_pool: AuthenticationGuard,
