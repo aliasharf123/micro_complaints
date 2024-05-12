@@ -130,6 +130,6 @@ async fn claim_complaint(
 	};
 
 	update(db_pool, Status::Taken, &complaint_id).await;
-	response.body("Authorised")
+	response.body("Authorised and Claimed!")
 
 }
