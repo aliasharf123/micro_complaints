@@ -41,6 +41,7 @@ async fn main() -> std::io::Result<()> {
 		App::new()
 			.configure(auth::config)
 			.configure(complaints::config)
+			.configure(users::config)
 			.app_data(app_data.clone())
 			.wrap(cors)
 			.wrap(Logger::default())
