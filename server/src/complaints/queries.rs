@@ -63,3 +63,14 @@ pub(super) async fn select(db_pool: &PgPool, status: Option<Status>) -> Vec<Comp
 	.await
 	.expect("Could not fetch complaints")
 }
+
+pub(super) async fn claim(db_pool: &PgPool, complaint_id: &i64, user_id: &i64) {
+	query!(
+		r#"UPDATE complaint SET supporter = $1, status = 'taken' WHERE id = $2"#,
+		user_id,
+		complaint_id
+	)
+	.execute(db_pool)
+	.await
+	.expect("Failed to update complaint");
+}

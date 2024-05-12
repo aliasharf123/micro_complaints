@@ -1,7 +1,7 @@
 use crate::auth::AuthenticationGuard;
 use crate::complaints::queries::*;
 use crate::mail::send_mail;
-use crate::model::{AppState, CreatedComplaint, Status, Role};
+use crate::model::{AppState, CreatedComplaint, Role, Status};
 use actix_web::{
 	delete, get, patch, post,
 	web::{self, Data, Json},
@@ -109,7 +109,7 @@ async fn close_complaint(
 		.expect("couldn't send mail");
 
 	let mut response = match user.role {
-    Role::Complainer => HttpResponse::Forbidden(),
+		Role::Complainer => HttpResponse::Forbidden(),
 		_ => HttpResponse::Ok(),
 	};
 
@@ -125,11 +125,10 @@ async fn claim_complaint(
 	let db_pool = &state.get_ref().db;
 	let user = auth_token.user;
 	let mut response = match user.role {
-    Role::Complainer => HttpResponse::Forbidden(),
+		Role::Complainer => HttpResponse::Forbidden(),
 		_ => HttpResponse::Ok(),
 	};
 
-	update(db_pool, Status::Taken, &complaint_id).await;
+	claim(db_pool, &complaint_id, &user.id).await;
 	response.body("Authorised and Claimed!")
-
 }
