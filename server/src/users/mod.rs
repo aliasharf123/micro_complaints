@@ -1,7 +1,7 @@
 use actix_web::web;
 
 mod handlers;
-mod queries;
+pub(crate) mod queries;
 #[cfg(test)]
 mod test;
 

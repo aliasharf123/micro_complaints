@@ -39,15 +39,16 @@ pub(super) async fn delete(db_pool: &PgPool, id: i64) {
 }
 
 //forgive me for I am about to cause paradigm conflictions
-pub(super) async fn update(db_pool: &PgPool, status: Status, id: &i64) {
+pub(super) async fn update(db_pool: &PgPool, status: Status, id: &i64) -> i64 {
 	query!(
-		r#"UPDATE complaint SET status = $1 WHERE id = $2"#,
+		r#"UPDATE complaint SET status = $1 WHERE id = $2 RETURNING author"#,
 		status as Status,
 		id
 	)
-	.execute(db_pool)
+	.fetch_one(db_pool)
 	.await
-	.expect("Failed to update complaint");
+	.expect("Failed to update complaint")
+	.author
 }
 
 pub(super) async fn select(db_pool: &PgPool, status: Option<Status>) -> Vec<Complaint> {

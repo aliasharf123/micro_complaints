@@ -2,6 +2,7 @@ use crate::auth::AuthenticationGuard;
 use crate::complaints::queries::*;
 use crate::mail::send_mail;
 use crate::model::{AppState, CreatedComplaint, Role, Status};
+use crate::users;
 use actix_web::{
 	delete, get, patch, post,
 	web::{self, Data, Json},
@@ -98,23 +99,23 @@ async fn close_complaint(
 	auth_token: AuthenticationGuard,
 ) -> impl Responder {
 	let db_pool = &state.get_ref().db;
-	let user = auth_token.user;
 	let mail_subject: String = String::from("Complaint Closed");
 	let mail_body: String = format!(
 		"Your complaint with the id {} has been closed with the reason:\n {}",
 		*complaint_id, *close_reason
 	);
-	send_mail(user.email, mail_subject, mail_body)
-		.await
-		.expect("couldn't send mail");
 
-	let mut response = match user.role {
-		Role::Complainer => HttpResponse::Forbidden(),
-		_ => HttpResponse::Ok(),
-	};
-
-	update(db_pool, Status::Closed, &complaint_id).await;
-	response.body("Authorised")
+	let user = auth_token.user;
+	if let Role::Complainer = user.role {
+		HttpResponse::Forbidden()
+	} else {
+		let complainer_id = update(db_pool, Status::Closed, &complaint_id).await;
+		let complainer_email = users::queries::get_email(db_pool, complainer_id).await;
+		send_mail(complainer_email, mail_subject, mail_body)
+			.await
+			.expect("couldn't send mail");
+		HttpResponse::Ok()
+	}
 }
 #[post("claim")]
 async fn claim_complaint(
@@ -124,11 +125,10 @@ async fn claim_complaint(
 ) -> impl Responder {
 	let db_pool = &state.get_ref().db;
 	let user = auth_token.user;
-	let mut response = match user.role {
-		Role::Complainer => HttpResponse::Forbidden(),
-		_ => HttpResponse::Ok(),
-	};
-
-	claim(db_pool, &complaint_id, &user.id).await;
-	response.body("Authorised and Claimed!")
+	if let Role::Complainer = user.role {
+		HttpResponse::Forbidden()
+	} else {
+		claim(db_pool, &complaint_id, &user.id).await;
+		HttpResponse::Ok()
+	}
 }
