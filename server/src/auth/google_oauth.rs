@@ -1,5 +1,5 @@
 use actix_web::web;
-use log::info;
+
 use reqwest::{Client, Url};
 use serde::Deserialize;
 use std::error::Error;
@@ -51,7 +51,7 @@ pub async fn request_token(
 	} else {
 		// print!("{:?}", response);
 		let message = response.text().await?;
-		Err(From::from(format!("{}", message)))
+		Err(From::from(message.to_string()))
 	}
 }
 

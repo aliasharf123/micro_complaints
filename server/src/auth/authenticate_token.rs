@@ -8,7 +8,7 @@ use actix_web::{
 	FromRequest, HttpRequest,
 };
 use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
-use log::info;
+
 use serde_json::json;
 use sqlx::query_as;
 

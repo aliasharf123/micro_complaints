@@ -16,4 +16,3 @@ pub fn config(config: &mut web::ServiceConfig) {
 
 	config.service(scope);
 }
-mod queries;
