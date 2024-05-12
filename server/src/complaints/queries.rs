@@ -38,10 +38,11 @@ pub(super) async fn delete(db_pool: &PgPool, id: i64) {
 		.expect("I shat");
 }
 
-pub(super) async fn update(db_pool: &PgPool, update_complaint: UpdatedComplaint, id: i64) {
+//forgive me for I am about to cause paradigm conflictions
+pub(super) async fn update(db_pool: &PgPool, status: Status, id: i64) {
 	query!(
 		r#"UPDATE complaint SET status = $1 WHERE id = $2"#,
-		update_complaint.status as Status,
+		status as Status,
 		id
 	)
 	.execute(db_pool)
