@@ -1,7 +1,7 @@
 use crate::auth::AuthenticationGuard;
 use crate::complaints::queries::*;
 use crate::mail::send_mail;
-use crate::model::{AppState, CreatedComplaint, Status, UpdatedComplaint};
+use crate::model::{AppState, CreatedComplaint, Status, Role};
 use actix_web::{
 	delete, get, patch, post,
 	web::{self, Data, Json},
@@ -45,13 +45,13 @@ pub(super) async fn get_id(
 pub(super) async fn patch_id(
 	state: Data<AppState>,
 	path: web::Path<(i64,)>,
-	complaint: Json<UpdatedComplaint>,
+	complaint: Json<Status>,
 	_: AuthenticationGuard,
 ) -> impl Responder {
 	let db_pool = &state.get_ref().db;
 	let id = path.into_inner().0;
 
-	update(db_pool, complaint.into_inner(), id).await;
+	update(db_pool, complaint.into_inner(), &id).await;
 
 	HttpResponse::Ok().body(format!("Updated complaint! id: {:?}", id))
 }
@@ -89,4 +89,30 @@ async fn post_complaint(
 		.await
 		.expect("couldn't send mail");
 	HttpResponse::Ok().body("inserted")
+}
+#[patch("close")]
+async fn close_complaint(
+	state: Data<AppState>,
+	complaint_id: Data<i64>,
+	close_reason: Data<String>,
+	auth_token: AuthenticationGuard,
+) -> impl Responder {
+	let db_pool = &state.get_ref().db;
+	let user = auth_token.user;
+	let mail_subject: String = String::from("Complaint Closed");
+	let mail_body: String = format!(
+		"Your complaint with the id {} has been closed with the reason:\n {}",
+		*complaint_id, *close_reason
+	);
+	send_mail(user.email, mail_subject, mail_body)
+		.await
+		.expect("couldn't send mail");
+
+	let mut response = match user.role {
+    Role::Complainer => HttpResponse::Forbidden(),
+		_ => HttpResponse::Ok(),
+	};
+
+	update(db_pool, Status::Closed, &complaint_id).await;
+	response.body("Authorised")
 }

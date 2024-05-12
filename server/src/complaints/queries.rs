@@ -1,6 +1,6 @@
 use sqlx::{query, query_as, PgPool};
 
-use crate::model::{Complaint, CreatedComplaint, Status, UpdatedComplaint};
+use crate::model::{Complaint, CreatedComplaint, Status};
 
 pub(super) async fn insert_complaint(
 	complaint: CreatedComplaint,
