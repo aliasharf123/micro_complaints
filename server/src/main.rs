@@ -2,7 +2,6 @@ use crate::model::AppState;
 use actix_cors::Cors;
 use actix_web::{http::header, middleware::Logger, web, App, HttpServer};
 use dotenvy::dotenv;
-use env_logger::Env;
 use micro_complaints::*;
 
 mod auth;
@@ -10,6 +9,7 @@ mod complaints;
 mod config;
 mod mail;
 mod model;
+mod users;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
 	dotenv().ok();

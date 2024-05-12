@@ -3,6 +3,7 @@ use actix_web::web;
 use self::handlers::*;
 
 mod handlers;
+mod queries;
 #[cfg(test)]
 mod test;
 pub fn config(config: &mut web::ServiceConfig) {
