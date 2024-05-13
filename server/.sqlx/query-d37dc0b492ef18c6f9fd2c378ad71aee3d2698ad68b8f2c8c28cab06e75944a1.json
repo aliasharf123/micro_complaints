@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT id, title, description, status as \"status!: Status\", tags FROM complaint WHERE status='closed'",
+  "query": "SELECT id, name, role as \"role!: Role\", email, photo FROM users WHERE id = $1 ",
   "describe": {
     "columns": [
       {
@@ -10,46 +10,48 @@
       },
       {
         "ordinal": 1,
-        "name": "title",
+        "name": "name",
         "type_info": "Text"
       },
       {
         "ordinal": 2,
-        "name": "description",
-        "type_info": "Text"
-      },
-      {
-        "ordinal": 3,
-        "name": "status!: Status",
+        "name": "role!: Role",
         "type_info": {
           "Custom": {
-            "name": "status",
+            "name": "role",
             "kind": {
               "Enum": [
-                "open",
-                "closed",
-                "taken"
+                "complainer",
+                "admin",
+                "support"
               ]
             }
           }
         }
       },
       {
+        "ordinal": 3,
+        "name": "email",
+        "type_info": "Text"
+      },
+      {
         "ordinal": 4,
-        "name": "tags",
+        "name": "photo",
         "type_info": "Text"
       }
     ],
     "parameters": {
-      "Left": []
+      "Left": [
+        "Int8"
+      ]
     },
     "nullable": [
       false,
       false,
-      false,
+      true,
       false,
       true
     ]
   },
-  "hash": "a6f028eefb8aa8c36554a27fdb422c8acd2ed29d8510e58d297eb52521de02ea"
+  "hash": "d37dc0b492ef18c6f9fd2c378ad71aee3d2698ad68b8f2c8c28cab06e75944a1"
 }

@@ -21,7 +21,7 @@
             "name": "role",
             "kind": {
               "Enum": [
-                "pleb",
+                "complainer",
                 "admin",
                 "support"
               ]

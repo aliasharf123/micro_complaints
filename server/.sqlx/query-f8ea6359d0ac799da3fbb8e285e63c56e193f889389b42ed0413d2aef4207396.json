@@ -1,12 +1,16 @@
 {
   "db_name": "PostgreSQL",
-  "query": "INSERT INTO complaint (title, description, status, tags) VALUES ($1, $2, $3, $4)",
+  "query": "UPDATE complaint SET status = $1 WHERE id = $2 RETURNING author",
   "describe": {
-    "columns": [],
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "author",
+        "type_info": "Int8"
+      }
+    ],
     "parameters": {
       "Left": [
-        "Text",
-        "Text",
         {
           "Custom": {
             "name": "status",
@@ -19,10 +23,12 @@
             }
           }
         },
-        "Text"
+        "Int8"
       ]
     },
-    "nullable": []
+    "nullable": [
+      false
+    ]
   },
-  "hash": "7d40258c928889fa1dc0b3dde49ec6b7270a2347a561537b163c7a84bb66cbd1"
+  "hash": "f8ea6359d0ac799da3fbb8e285e63c56e193f889389b42ed0413d2aef4207396"
 }
