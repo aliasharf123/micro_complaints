@@ -1,7 +1,7 @@
 use actix_web::test;
 use dotenvy::dotenv;
 
-use crate::{model::AppState, init_dbpool};
+use crate::{init_dbpool, model::AppState};
 
 use super::*;
 

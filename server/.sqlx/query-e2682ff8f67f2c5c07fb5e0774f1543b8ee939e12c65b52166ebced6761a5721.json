@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT id, title, description, status as \"status!: Status\", tags FROM complaint WHERE status='open'",
+  "query": "SELECT id, title, description, status as \"status!: Status\", tags, author as author_id, supporter as supporter_id FROM complaint WHERE id = $1 ",
   "describe": {
     "columns": [
       {
@@ -38,18 +38,32 @@
         "ordinal": 4,
         "name": "tags",
         "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "author_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 6,
+        "name": "supporter_id",
+        "type_info": "Int8"
       }
     ],
     "parameters": {
-      "Left": []
+      "Left": [
+        "Int8"
+      ]
     },
     "nullable": [
       false,
       false,
       false,
       false,
-      true
+      true,
+      false,
+      false
     ]
   },
-  "hash": "c50bc98dd5bcaac552f6b542ade83e308e4b795f851c2287e77897956a93dc48"
+  "hash": "e2682ff8f67f2c5c07fb5e0774f1543b8ee939e12c65b52166ebced6761a5721"
 }

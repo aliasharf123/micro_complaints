@@ -1,10 +1,9 @@
 #[cfg(test)]
 mod tests;
 
-use std::{env, error::Error};
-use actix_web::web::Json;
 use reqwest::{Client, Response};
 use serde::Serialize;
+use std::env;
 
 #[allow(non_snake_case)]
 #[derive(Serialize)]
