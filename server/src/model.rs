@@ -1,5 +1,5 @@
 use crate::config;
-// use chrono::{DateTime, Utc};
+use chrono::{NaiveDate, NaiveDateTime};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, sqlx::Type, Serialize, Deserialize, Clone)]
@@ -73,6 +73,8 @@ pub struct Complaint {
     pub tags: Option<String>, //Vec<Tags> ?
     pub author_id: i64,
     pub supporter_id: Option<i64>,
+    pub time_created: Option<NaiveDateTime>,
+    pub time_closed: Option<NaiveDateTime>,
 }
 
 //Sewelam will nuke these redundant structs
