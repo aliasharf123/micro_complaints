@@ -88,3 +88,8 @@ pub struct CreatedComplaint {
 pub struct UpdatedComplaint {
     pub status: Status,
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct CloseComplaint {
+    pub close_reason: String,
+}
