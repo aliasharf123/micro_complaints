@@ -1,7 +1,7 @@
 use crate::auth::AuthenticationGuard;
 use crate::complaints::queries::*;
 use crate::mail::send_mail;
-use crate::model::{AppState, CreatedComplaint, Role, Status};
+use crate::model::{AppState, CreatedComplaint, Role, Status, UpdatedComplaint};
 use crate::users;
 use actix_web::{
     delete, get, patch, post,
@@ -47,13 +47,13 @@ pub(super) async fn get_id(
 pub(super) async fn patch_id(
     state: Data<AppState>,
     path: web::Path<(i64,)>,
-    complaint: Json<Status>,
+    complaint: Json<UpdatedComplaint>,
     _: AuthenticationGuard,
 ) -> impl Responder {
     let db_pool = &state.get_ref().db;
     let id = path.into_inner().0;
 
-    update(db_pool, complaint.into_inner(), &id).await;
+    update(db_pool, complaint.into_inner().status, &id).await;
 
     HttpResponse::Ok().body(format!("Updated complaint! id: {:?}", id))
 }

@@ -84,7 +84,7 @@ pub struct CreatedComplaint {
     pub tags: Option<String>, //Vec<Tags> ?
 }
 
-// #[derive(Debug, Serialize, Deserialize, Clone)]
-// pub struct UpdatedComplaint {
-// 	pub status: Status,
-// }
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct UpdatedComplaint {
+    pub status: Status,
+}

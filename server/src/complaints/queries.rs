@@ -1,3 +1,4 @@
+use log::info;
 use sqlx::{query, query_as, PgPool};
 
 use crate::model::{Complaint, CreatedComplaint, Status};
@@ -41,6 +42,7 @@ pub(super) async fn delete(db_pool: &PgPool, id: i64) {
 
 //forgive me for I am about to cause paradigm conflictions
 pub(super) async fn update(db_pool: &PgPool, status: Status, id: &i64) -> i64 {
+    info!("sdas {:?}", status);
     query!(
         r#"UPDATE complaint SET status = $1 WHERE id = $2 RETURNING author"#,
         status as Status,
