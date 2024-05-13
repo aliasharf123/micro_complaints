@@ -77,7 +77,6 @@ pub struct Complaint {
     pub time_closed: Option<NaiveDateTime>,
 }
 
-//Sewelam will nuke these redundant structs
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CreatedComplaint {
     pub title: String,
