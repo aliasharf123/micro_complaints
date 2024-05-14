@@ -10,4 +10,8 @@ export interface Complaint {
   description?: string;
   status: Status;
   tags?: string;
+  author_id?: number;
+  supporter_id?: number;
+  time_created?: Date;
+  time_closed?: Date;
 }

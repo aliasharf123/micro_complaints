@@ -1,8 +1,8 @@
 "use client";
 import { useGetController } from "@/stores/complaints-store";
-import { getCookies } from "cookies-next";
 import React, { useEffect } from "react";
-import SupporterInfo from "./components/complaint-datail";
+import ComplaintsTable from "./components/complaints-table";
+import ComplaintDetailModal from "./components/complaint-datail-modal";
 
 export default function Page() {
   const status = useGetController((state) => state.status);
@@ -15,14 +15,10 @@ export default function Page() {
     };
   }, []);
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-  if (status === "error") return <div>Error</div>;
-
   return (
     <div className="px-10 grid gap-10">
-      <SupporterInfo />
+      {status !== "loading" ? <ComplaintsTable /> : <div>Loading...</div>}
+      <ComplaintDetailModal />
     </div>
   );
 }
