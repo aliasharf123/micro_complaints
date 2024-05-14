@@ -16,7 +16,6 @@ import { FaPlus } from "react-icons/fa6";
 
 export default function ComplaintDetailModal() {
   const complaints = useComplaintStore((state) => state.complaints);
-  const user = useAuthStore((state) => state.authUser);
   const complaintId = Number(useSearchParams().get("complaintId"));
 
   const complaint = React.useMemo(
@@ -24,7 +23,7 @@ export default function ComplaintDetailModal() {
       complaintId
         ? complaints.filter((complaint) => complaint.id == complaintId)[0]
         : null,
-    [complaintId, complaintId]
+    [complaintId]
   );
 
   return (

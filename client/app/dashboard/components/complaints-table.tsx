@@ -1,6 +1,11 @@
 "use client";
 import { Complaint, Status } from "@/app/utils";
-import { useComplaintStore } from "@/stores/complaints-store";
+import {
+  useCloseController,
+  useComplaintStore,
+  useDeleteController,
+  useTakeController,
+} from "@/stores/complaints-store";
 import {
   Chip,
   Pagination,
@@ -64,14 +69,10 @@ export default function ComplaintsTable() {
   const [selectionBehavior, setSelectionBehavior] = React.useState("toggle");
   const [page, setPage] = React.useState(1);
   const rowsPerPage = 10;
-  const params = useParams();
   const router = useRouter();
   const pathname = usePathname();
 
   const openDetail = React.useCallback((complaintId: Complaint["id"]) => {
-    // const newParams = new URLSearchParams(params.toString());
-    // newParams.set("complaintId", complaintId.toString());
-    // console.log(newParams.toString);
     router.push(`${pathname}?complaintId=${complaintId}`);
   }, []);
 
@@ -127,16 +128,35 @@ export default function ComplaintsTable() {
                 </span>
               </Tooltip>
               <Tooltip content="Take compliant">
-                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <span
+                  onClick={() => useTakeController.action(complaint.id)}
+                  className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                >
                   <EditIcon />
                 </span>
               </Tooltip>
               <Tooltip color="danger" content="Delete compliant">
-                <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                <span
+                  onClick={() => useDeleteController.action(complaint.id)}
+                  className="text-lg text-danger cursor-pointer active:opacity-50"
+                >
                   <DeleteIcon />
                 </span>
               </Tooltip>
             </div>
+          );
+        case "time_closed":
+          const dateClosed = complaint.time_closed
+            ? new Date(complaint.time_closed)
+            : new Date();
+          return (
+            <span>
+              {dateClosed.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
           );
         default:
           return <span>None</span>;
