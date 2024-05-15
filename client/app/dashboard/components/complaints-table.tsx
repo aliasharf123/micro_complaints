@@ -1,11 +1,9 @@
 "use client";
 import { Complaint, Status } from "@/app/utils";
 import {
-  useCloseController,
   useComplaintStore,
   useDeleteController,
   useGetController,
-  useTakeController,
 } from "@/stores/complaints-store";
 import {
   Chip,
@@ -24,7 +22,6 @@ import UserColumn from "./user-column";
 import { RiProgress1Line } from "react-icons/ri";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import { MdOutlineDoNotDisturbOn } from "react-icons/md";
-import { EditIcon } from "@/app/icons/EditIcon";
 import { DeleteIcon } from "@/app/icons/DeleteIcon";
 import { EyeIcon } from "@/app/icons/EyeIcon";
 import { useParams, usePathname, useRouter } from "next/navigation";
@@ -68,6 +65,7 @@ const columns = [
 
 export default function ComplaintsTable() {
   const complaints = useComplaintStore((state) => state.complaints);
+  const statusDelete = useDeleteController((state) => state.status);
   const [selectionBehavior, setSelectionBehavior] = React.useState("toggle");
   const [page, setPage] = React.useState(1);
   const status = useGetController((state) => state.status);
@@ -135,7 +133,11 @@ export default function ComplaintsTable() {
                   onClick={() => useDeleteController.action(complaint.id)}
                   className="text-lg text-danger cursor-pointer active:opacity-50"
                 >
-                  <DeleteIcon />
+                  {statusDelete === "loading" ? (
+                    <Spinner color="danger" size="sm" />
+                  ) : (
+                    <DeleteIcon />
+                  )}
                 </span>
               </Tooltip>
             </div>
