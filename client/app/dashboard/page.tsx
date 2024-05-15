@@ -15,7 +15,7 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="max-md:px-10 px-[6.5rem] grid gap-5 mt-5">
+    <div className="max-md:px-10 px-[7rem] grid gap-5 mt-5">
       <ComplaintInfo />
       <ComplaintsTable />
       <ComplaintDetailModal />

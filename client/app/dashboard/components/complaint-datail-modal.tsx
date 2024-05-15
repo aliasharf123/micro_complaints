@@ -35,7 +35,7 @@ import * as yup from "yup";
 import { useTheme } from "next-themes";
 
 const itemClasses = {
-  base: "py-0 2 w-full",
+  base: "py-0 2 border-none w-full",
   title: "font-normal text-medium",
   trigger:
     "px-2 py-0 bg-content2 data-[hover=true]:bg-default-100 rounded-lg h-14 flex items-center",
@@ -188,7 +188,7 @@ export default function ComplaintDetailModal() {
                     {complaint?.status}
                   </Chip>
                 </div>
-                <Accordion>
+                <Accordion showDivider={false} className="mt-2">
                   <AccordionItem
                     key="1"
                     startContent={

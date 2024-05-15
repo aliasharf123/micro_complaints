@@ -1,5 +1,5 @@
 "use client";
-import { Complaint, Status } from "@/app/utils";
+import { Complaint, Status, statusOptions } from "@/app/utils";
 import {
   useComplaintStore,
   useDeleteController,
@@ -7,6 +7,10 @@ import {
 } from "@/stores/complaints-store";
 import {
   Chip,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Input,
   Pagination,
   Spinner,
   Table,
@@ -25,6 +29,9 @@ import { MdOutlineDoNotDisturbOn } from "react-icons/md";
 import { DeleteIcon } from "@/app/icons/DeleteIcon";
 import { EyeIcon } from "@/app/icons/EyeIcon";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { SearchIcon } from "@/app/icons/SearchIcon";
+import { Button, Dropdown } from "@nextui-org/react";
+import { ChevronDownIcon } from "@/app/icons/ChevronDownIcon";
 export const statusColorMap = (
   status: string
 ): {
@@ -68,14 +75,47 @@ export default function ComplaintsTable() {
   const statusDelete = useDeleteController((state) => state.status);
   const [selectionBehavior, setSelectionBehavior] = React.useState("toggle");
   const [page, setPage] = React.useState(1);
+  const [statusFilter, setStatusFilter] = React.useState("all");
+  const [filterValue, setFilterValue] = React.useState("");
   const status = useGetController((state) => state.status);
   const rowsPerPage = 6;
   const router = useRouter();
   const pathname = usePathname();
 
+  const hasSearchFilter = Boolean(filterValue);
+
   const openDetail = React.useCallback((complaintId: Complaint["id"]) => {
     router.push(`${pathname}?complaintId=${complaintId}`);
   }, []);
+
+  const filteredItems = React.useMemo(() => {
+    let filteredUsers = [...complaints];
+
+    if (hasSearchFilter) {
+      filteredUsers = filteredUsers.filter((complaint) =>
+        complaint.title.toLowerCase().includes(filterValue.toLowerCase())
+      );
+    }
+    if (statusFilter !== "all" && Array.from(statusFilter).length !== 3) {
+      console.log(statusFilter, "statusFilter");
+      filteredUsers = filteredUsers.filter((user) =>
+        Array.from(statusFilter).includes(user.status)
+      );
+    }
+
+    return filteredUsers;
+  }, [complaints, filterValue, statusFilter]);
+
+  const pages = useMemo(() => {
+    return complaints?.length ? Math.ceil(complaints?.length / rowsPerPage) : 0;
+  }, [complaints?.length, rowsPerPage]);
+
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return filteredItems.slice(start, end);
+  }, [page, filteredItems]);
 
   const renderCell = React.useCallback(
     (complaint: Complaint, columnKey: keyof Complaint) => {
@@ -148,11 +188,17 @@ export default function ComplaintsTable() {
             : new Date();
           return (
             <span>
-              {dateClosed.toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+              {complaint.time_closed ? (
+                dateClosed.toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              ) : (
+                <span className="text-default-500 text-small">
+                  Not closed yet
+                </span>
+              )}
             </span>
           );
         default:
@@ -161,67 +207,119 @@ export default function ComplaintsTable() {
     },
     []
   );
-  const pages = useMemo(() => {
-    return complaints?.length ? Math.ceil(complaints?.length / rowsPerPage) : 0;
-  }, [complaints?.length, rowsPerPage]);
 
-  const items = React.useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
+  const onSearchChange = React.useCallback((value: string) => {
+    if (value) {
+      setFilterValue(value);
+      setPage(1);
+    } else {
+      setFilterValue("");
+    }
+  }, []);
 
-    return complaints.slice(start, end);
-  }, [page, complaints]);
+  const onClear = React.useCallback(() => {
+    setFilterValue("");
+    setPage(1);
+  }, []);
 
   return (
-    <Table
-      aria-label="Rows actions table example with dynamic content"
-      selectionMode="multiple"
-      selectionBehavior={selectionBehavior as any}
-      classNames={{
-        table: status !== "loaded" ? "min-h-[400px]" : "",
-      }}
-      bottomContent={
-        pages > 0 ? (
-          <div className="flex w-full justify-center">
-            <Pagination
-              isCompact
-              showControls
-              showShadow
-              color="primary"
-              page={page}
-              total={pages}
-              onChange={(page) => setPage(page)}
-            />
-          </div>
-        ) : null
-      }
-    >
-      <TableHeader columns={columns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody
-        isLoading={status === "loading"}
-        emptyContent={"No rows to display."}
-        items={items}
-        loadingContent={<Spinner label="Loading..." />}
+    <div className="grid gap-3">
+      <div className="flex justify-between">
+        <Input
+          aria-label="search"
+          className="max-w-[300px] "
+          classNames={{
+            base: "px-1",
+            inputWrapper:
+              "bg-default-400/20 data-[hover=true]:bg-default-500/30 group-data-[focus=true]:bg-default-500/20",
+            input:
+              "placeholder:text-default-600 group-data-[has-value=true]:text-foreground",
+          }}
+          isClearable
+          value={filterValue}
+          labelPlacement="outside"
+          placeholder="Search by title..."
+          onClear={() => onClear()}
+          onValueChange={onSearchChange}
+          startContent={<SearchIcon />}
+        />
+        <div>
+          <Dropdown>
+            <DropdownTrigger className="hidden sm:flex">
+              <Button
+                endContent={<ChevronDownIcon className="text-small" />}
+                variant="flat"
+              >
+                Status
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              disallowEmptySelection
+              aria-label="Table Columns"
+              closeOnSelect={false}
+              selectedKeys={statusFilter}
+              selectionMode="multiple"
+              onSelectionChange={setStatusFilter as any}
+            >
+              {statusOptions.map((status) => (
+                <DropdownItem key={status.uid} className="capitalize">
+                  {status.name}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+      </div>
+      <Table
+        aria-label="Rows actions table example with dynamic content"
+        selectionMode="multiple"
+        selectionBehavior={selectionBehavior as any}
+        classNames={{
+          table: status !== "loaded" ? "min-h-[400px]" : "",
+        }}
+        bottomContent={
+          pages > 0 ? (
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="primary"
+                page={page}
+                total={pages}
+                onChange={(page) => setPage(page)}
+              />
+            </div>
+          ) : null
+        }
       >
-        {(complaint) => (
-          <TableRow key={complaint.id}>
-            {(columnKey) => (
-              <TableCell>
-                {renderCell(complaint, columnKey as keyof Complaint)}
-              </TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          isLoading={status === "loading"}
+          emptyContent={"No rows to display."}
+          items={items}
+          loadingContent={<Spinner label="Loading..." />}
+        >
+          {(complaint) => (
+            <TableRow key={complaint.id}>
+              {(columnKey) => (
+                <TableCell>
+                  {renderCell(complaint, columnKey as keyof Complaint)}
+                </TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

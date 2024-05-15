@@ -3,6 +3,11 @@ export enum Status {
   Taken = "Taken",
   Closed = "Closed",
 }
+export const statusOptions = [
+  { name: "Open", uid: "Open" },
+  { name: "Taken", uid: "Taken" },
+  { name: "Closed", uid: "Closed" },
+];
 
 export interface Complaint {
   id: number;
