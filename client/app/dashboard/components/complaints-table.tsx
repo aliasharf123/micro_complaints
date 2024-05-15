@@ -71,7 +71,7 @@ export default function ComplaintsTable() {
   const [selectionBehavior, setSelectionBehavior] = React.useState("toggle");
   const [page, setPage] = React.useState(1);
   const status = useGetController((state) => state.status);
-  const rowsPerPage = 10;
+  const rowsPerPage = 6;
   const router = useRouter();
   const pathname = usePathname();
 
@@ -163,13 +163,20 @@ export default function ComplaintsTable() {
     return complaints?.length ? Math.ceil(complaints?.length / rowsPerPage) : 0;
   }, [complaints?.length, rowsPerPage]);
 
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return complaints.slice(start, end);
+  }, [page, complaints]);
+
   return (
     <Table
       aria-label="Rows actions table example with dynamic content"
       selectionMode="multiple"
       selectionBehavior={selectionBehavior as any}
       classNames={{
-        table: "min-h-[400px]",
+        table: status !== "loaded" ? "min-h-[400px]" : "",
       }}
       bottomContent={
         pages > 0 ? (
@@ -200,7 +207,7 @@ export default function ComplaintsTable() {
       <TableBody
         isLoading={status === "loading"}
         emptyContent={"No rows to display."}
-        items={complaints}
+        items={items}
         loadingContent={<Spinner label="Loading..." />}
       >
         {(complaint) => (

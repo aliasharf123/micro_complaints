@@ -6,8 +6,6 @@ import ComplaintDetailModal from "./components/complaint-datail-modal";
 import ComplaintInfo from "./components/complaint-info";
 
 export default function Page() {
-  const status = useGetController((state) => state.status);
-
   useEffect(() => {
     useGetController.action("");
 
@@ -17,7 +15,7 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="max-md:px-10 px-24 grid gap-5 mt-5">
+    <div className="max-md:px-10 px-[6.5rem] grid gap-5 mt-5">
       <ComplaintInfo />
       <ComplaintsTable />
       <ComplaintDetailModal />
