@@ -122,7 +122,7 @@ export default function Form({ isSignIn }: { isSignIn?: boolean }) {
     setCookie(
       // ده اي عبط بس مش عارف اعمل ايه
       "token",
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzE1NzM5Njg5LCJleHAiOjE3MTU5NTU2ODl9._Dx4NwbhGKGfvdu6yUe7r4OyP6ock23rH9XCLNjLUyA"
+      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzE1NzY0NzMwLCJleHAiOjE3MTU5ODA3MzB9.0om0sioxghxWQORZBA5BLmalUhhZ63bj4mTOMfda7AA"
     );
     const qs = new URLSearchParams(options);
 
