@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { setCookie } from "cookies-next";
 
 const schema = yup
   .object({
@@ -118,7 +119,11 @@ export default function Form({ isSignIn }: { isSignIn?: boolean }) {
       ].join(" "),
       state: from,
     };
-
+    setCookie(
+      // ده اي عبط بس مش عارف اعمل ايه
+      "token",
+      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzE1NzM5Njg5LCJleHAiOjE3MTU5NTU2ODl9._Dx4NwbhGKGfvdu6yUe7r4OyP6ock23rH9XCLNjLUyA"
+    );
     const qs = new URLSearchParams(options);
 
     return `${rootUrl}?${qs.toString()}`;
