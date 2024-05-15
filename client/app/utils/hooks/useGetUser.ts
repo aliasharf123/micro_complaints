@@ -5,8 +5,8 @@ import { User } from "../types";
 export const useGetUser = (authorId: number) => {
   const token = getCookie("token");
 
-  const fetcher = (...args) =>
-    fetch(...args, {
+  const fetcher = (url: string) =>
+    fetch(url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
