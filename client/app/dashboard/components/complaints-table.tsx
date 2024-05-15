@@ -4,11 +4,13 @@ import {
   useCloseController,
   useComplaintStore,
   useDeleteController,
+  useGetController,
   useTakeController,
 } from "@/stores/complaints-store";
 import {
   Chip,
   Pagination,
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -68,6 +70,7 @@ export default function ComplaintsTable() {
   const complaints = useComplaintStore((state) => state.complaints);
   const [selectionBehavior, setSelectionBehavior] = React.useState("toggle");
   const [page, setPage] = React.useState(1);
+  const status = useGetController((state) => state.status);
   const rowsPerPage = 10;
   const router = useRouter();
   const pathname = usePathname();
@@ -165,6 +168,9 @@ export default function ComplaintsTable() {
       aria-label="Rows actions table example with dynamic content"
       selectionMode="multiple"
       selectionBehavior={selectionBehavior as any}
+      classNames={{
+        table: "min-h-[400px]",
+      }}
       bottomContent={
         pages > 0 ? (
           <div className="flex w-full justify-center">
@@ -191,7 +197,12 @@ export default function ComplaintsTable() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={complaints}>
+      <TableBody
+        isLoading={status === "loading"}
+        emptyContent={"No rows to display."}
+        items={complaints}
+        loadingContent={<Spinner label="Loading..." />}
+      >
         {(complaint) => (
           <TableRow key={complaint.id}>
             {(columnKey) => (
