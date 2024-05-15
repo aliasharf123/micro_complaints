@@ -31,12 +31,14 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         let cors = Cors::default()
             .allow_any_origin()
-            .allowed_methods(vec!["GET", "POST", "PUT", "DELETE", "PATCH"])
-            .allowed_headers(vec![
-                header::CONTENT_TYPE,
-                header::AUTHORIZATION,
-                header::ACCEPT,
-            ])
+            // .allowed_methods(vec!["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
+            .allow_any_method()
+            // .allowed_headers(vec![
+            //     header::CONTENT_TYPE,
+            //     header::AUTHORIZATION,
+            //     header::ACCEPT,
+            // ])
+            .allow_any_header()
             .supports_credentials();
         App::new()
             .configure(auth::config)
