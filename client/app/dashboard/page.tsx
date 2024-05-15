@@ -1,12 +1,11 @@
 "use client";
 import { useGetController } from "@/stores/complaints-store";
-import { getCookies } from "cookies-next";
 import React, { useEffect } from "react";
-import SupporterInfo from "./components/complaint-datail";
+import ComplaintsTable from "./components/complaints-table";
+import ComplaintDetailModal from "./components/complaint-datail-modal";
+import ComplaintInfo from "./components/complaint-info";
 
 export default function Page() {
-  const status = useGetController((state) => state.status);
-
   useEffect(() => {
     useGetController.action("");
 
@@ -15,14 +14,11 @@ export default function Page() {
     };
   }, []);
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-  if (status === "error") return <div>Error</div>;
-
   return (
-    <div className="px-10 grid gap-10">
-      <SupporterInfo />
+    <div className="max-md:px-10 px-[7rem] grid gap-5 mt-5">
+      <ComplaintInfo />
+      <ComplaintsTable />
+      <ComplaintDetailModal />
     </div>
   );
 }
