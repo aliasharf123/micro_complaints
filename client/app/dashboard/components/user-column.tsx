@@ -5,29 +5,10 @@ import { getCookie } from "cookies-next";
 import React from "react";
 import useSWR from "swr";
 import { Skeleton } from "@nextui-org/react";
+import { useGetUser } from "@/app/utils/hooks/useGetUser";
 
 export default function UserColumn({ authorId }: { authorId: number }) {
-  const token = getCookie("token");
-
-  const fetcher = (...args) =>
-    fetch(...args, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((res) => res.json());
-  const {
-    data: user,
-    error,
-    isLoading,
-  } = useSWR(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/users/${authorId}`,
-    fetcher
-  ) as {
-    data: User;
-    error: any;
-    isLoading: boolean;
-  };
+  const { error, isLoading, user } = useGetUser(authorId);
   if (error) {
     return <div>Error</div>;
   }

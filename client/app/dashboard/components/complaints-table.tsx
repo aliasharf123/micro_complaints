@@ -26,7 +26,7 @@ import { EditIcon } from "@/app/icons/EditIcon";
 import { DeleteIcon } from "@/app/icons/DeleteIcon";
 import { EyeIcon } from "@/app/icons/EyeIcon";
 import { useParams, usePathname, useRouter } from "next/navigation";
-const statusColorMap = (
+export const statusColorMap = (
   status: string
 ): {
   color:
@@ -125,14 +125,6 @@ export default function ComplaintsTable() {
                   className="text-lg text-default-400 cursor-pointer active:opacity-50"
                 >
                   <EyeIcon />
-                </span>
-              </Tooltip>
-              <Tooltip content="Take compliant">
-                <span
-                  onClick={() => useTakeController.action(complaint.id)}
-                  className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                >
-                  <EditIcon />
                 </span>
               </Tooltip>
               <Tooltip color="danger" content="Delete compliant">
