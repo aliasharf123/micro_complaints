@@ -104,11 +104,11 @@ export default function Form({ isSignIn }: { isSignIn?: boolean }) {
   // });
 
   const getGoogleUrl = (from: string) => {
-    const rootUrl = `https://accounts.google.com/o/oauth2/v2/auth`;
+    const rootUrl = process.env.NEXT_PUBLIC_ROOT_URL;
     const options = {
-      redirect_uri: "http://127.0.0.1:8080/auth/google" as string,
-      client_id:
-        "359948012128-jp625msdhmpbsdjihbck7pg5lldtl5m0.apps.googleusercontent.com" as string,
+      redirect_uri:
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/google` as string,
+      client_id: process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID as string,
       access_type: "offline",
       response_type: "code",
       prompt: "consent",
