@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { Role, User } from "./app/utils/types";
+import { cookieBuilder } from "./app/utils/cookie-handler";
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
@@ -30,11 +31,25 @@ export async function middleware(request: NextRequest) {
     if (user.role.toLowerCase() == Role.Complainer.toLocaleLowerCase()) {
       return NextResponse.redirect(new URL("/not-authorized", request.url));
     }
+  } else {
+    const url = new URL(request.url);
+    const cookieParam = url.searchParams.get("cookie");
+    if (url.searchParams.has("cookie") && !request.cookies.has("token")) {
+      let cookie = cookieBuilder(cookieParam!);
+      let response = NextResponse.redirect(new URL("/", request.url));
+      response.cookies.set(cookie.name, cookie.value, {
+        httpOnly: false,
+        path: cookie.path || "/",
+        maxAge: cookie["max-age"] ? parseInt(cookie["max-age"]) : undefined,
+      });
+
+      return response;
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/auth/:path*", "/dashboard/:path*"],
+  matcher: ["/auth/:path*", "/dashboard/:path*", "/"],
 };

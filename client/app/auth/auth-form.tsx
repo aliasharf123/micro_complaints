@@ -119,11 +119,7 @@ export default function Form({ isSignIn }: { isSignIn?: boolean }) {
       ].join(" "),
       state: from,
     };
-    setCookie(
-      // ده اي عبط بس مش عارف اعمل ايه
-      "token",
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzE1NzY0NzMwLCJleHAiOjE3MTU5ODA3MzB9.0om0sioxghxWQORZBA5BLmalUhhZ63bj4mTOMfda7AA"
-    );
+
     const qs = new URLSearchParams(options);
 
     return `${rootUrl}?${qs.toString()}`;
