@@ -1,0 +1,74 @@
+version: "3.8"
+services:
+  db:
+    container_name: postgres_container
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: test_db
+    expose:
+      - 5432
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+  actixapi:
+    build: ./server
+    container_name: actixapi
+    restart: always
+    env_file:
+      - "./server/.env.docker"
+    expose:
+      - 8080
+    links:
+      - nextjsfrontend
+  nextjsfrontend:
+    build: ./client
+    container_name: nextjsfrontend
+    restart: always
+    env_file:
+      - "./client/.env.docker"
+    ports:
+      - "3000:3000"
+
+  mysql-container:
+    image: mysql:latest
+    container_name: spring-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mail
+    expose:
+      - 3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  springapp:
+    build:
+      context: .
+      dockerfile: mailServerFile
+    container_name: mailcontainer
+    # expose:
+    #   - 8080
+    ports:
+      - "8081:3306"
+    depends_on:
+      - mysql-container
+#    environment:
+
+    volumes:
+      - ./logs:/app/logs
+
+volumes:
+  mysql-data:
+
+networks:
+  default:
+    name: starlink
