@@ -1,0 +1,12 @@
+FROM openjdk:17-jdk
+
+
+WORKDIR /app
+
+# COPY target/springapp.jar /app/springapp.jar
+#ARG JAR_FILE
+# COPY ${JAR_FILE} app.jar
+COPY ./mailServer.jar app.jar
+
+EXPOSE 8080
+CMD ["java","-jar","app.jar"]

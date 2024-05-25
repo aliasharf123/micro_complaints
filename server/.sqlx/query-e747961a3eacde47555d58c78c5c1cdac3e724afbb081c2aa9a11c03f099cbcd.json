@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT id, title, description, status as \"status!: Status\", tags, author as author_id, supporter as supporter_id FROM complaint WHERE id = $1 ",
+  "query": "SELECT id, title, description, status as \"status!: Status\", tags, author as author_id, supporter as supporter_id, time_created, time_closed FROM complaint WHERE id = $1 ",
   "describe": {
     "columns": [
       {
@@ -48,6 +48,16 @@
         "ordinal": 6,
         "name": "supporter_id",
         "type_info": "Int8"
+      },
+      {
+        "ordinal": 7,
+        "name": "time_created",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 8,
+        "name": "time_closed",
+        "type_info": "Timestamp"
       }
     ],
     "parameters": {
@@ -62,8 +72,10 @@
       false,
       true,
       false,
-      false
+      false,
+      true,
+      true
     ]
   },
-  "hash": "e2682ff8f67f2c5c07fb5e0774f1543b8ee939e12c65b52166ebced6761a5721"
+  "hash": "e747961a3eacde47555d58c78c5c1cdac3e724afbb081c2aa9a11c03f099cbcd"
 }
